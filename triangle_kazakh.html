@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3.10 Үшбұрыш қабырғалары мен бұрыштарының байланысы</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a237e;
+    --secondary: #283593;
+    --accent: #ffd600;
+    --accent2: #ff6f00;
+    --green: #00c853;
+    --red: #d50000;
+    --light: #e8eaf6;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --shadow: 0 8px 32px rgba(26,35,126,0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #0d1b6e 0%, #1a237e 40%, #283593 100%);
+    min-height: 100vh;
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* Stars background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(255,214,0,0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255,111,0,0.05) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, #ffd600, #ff6f00);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(255,214,0,0.4);
+  }
+  header::before {
+    content: '△ △ △ △ △ △ △ △ △ △ △ △ △ △ △';
+    position: absolute;
+    top: 10px; left: 0; right: 0;
+    font-size: 14px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 20px;
+    text-align: center;
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 40px;
+  }
+  .header-icon {
+    width: 72px; height: 72px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.4);
+    flex-shrink: 0;
+  }
+  header h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: #1a237e;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(255,255,255,0.3);
+  }
+  header p {
+    color: rgba(26,35,126,0.8);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .grade-badge {
+    margin-left: auto;
+    background: #1a237e;
+    color: #ffd600;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  /* Nav tabs */
+  .nav-tabs {
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    gap: 4px;
+    padding: 12px 40px 0;
+    overflow-x: auto;
+  }
+  .nav-tab {
+    padding: 10px 22px 14px;
+    border-radius: 12px 12px 0 0;
+    border: none;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    white-space: nowrap;
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-bottom: none;
+  }
+  .nav-tab.active {
+    background: #ffd600;
+    color: #1a237e;
+    font-weight: 800;
+  }
+  .nav-tab:hover:not(.active) {
+    background: rgba(255,214,0,0.2);
+    color: #ffd600;
+  }
+
+  /* Sections */
+  .section { display: none; padding: 36px 0 60px; }
+  .section.active { display: block; }
+
+  /* Card */
+  .card {
+    background: rgba(255,255,255,0.97);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.4s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .card-title .icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .icon-blue { background: #e8eaf6; }
+  .icon-orange { background: #fff3e0; }
+  .icon-green { background: #e8f5e9; }
+
+  /* Theory block */
+  .theory-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #333;
+  }
+
+  .theorem-box {
+    background: linear-gradient(135deg, #e8eaf6, #f3f4ff);
+    border-left: 6px solid var(--primary);
+    border-radius: 0 16px 16px 0;
+    padding: 20px 24px;
+    margin: 20px 0;
+    position: relative;
+  }
+  .theorem-box::before {
+    content: '📐 ТЕОРЕМА';
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .theorem-box p {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.6;
+  }
+
+  .rule-box {
+    background: linear-gradient(135deg, #fff8e1, #fffde7);
+    border-left: 6px solid var(--accent2);
+    border-radius: 0 16px 16px 0;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .rule-box p { font-size: 0.98rem; line-height: 1.7; color: #5d4037; }
+
+  /* Interactive Triangle Canvas */
+  .canvas-wrap {
+    background: linear-gradient(135deg, #f8f9ff, #eef0ff);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    border: 2px dashed #c5cae9;
+    margin: 20px 0;
+  }
+  canvas {
+    border-radius: 12px;
+    cursor: crosshair;
+  }
+  .canvas-info {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .info-chip {
+    background: white;
+    border-radius: 50px;
+    padding: 8px 18px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 2px solid transparent;
+  }
+  .chip-a { border-color: #e53935; color: #b71c1c; }
+  .chip-b { border-color: #1e88e5; color: #0d47a1; }
+  .chip-c { border-color: #43a047; color: #1b5e20; }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    margin: 16px 0;
+  }
+  .compare-table th {
+    background: var(--primary);
+    color: white;
+    padding: 14px 16px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    text-align: center;
+  }
+  .compare-table td {
+    padding: 12px 16px;
+    text-align: center;
+    border-bottom: 1px solid #e8eaf6;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f5f6ff; }
+  .compare-table tr:nth-child(odd) td { background: white; }
+
+  /* Steps proof */
+  .proof-steps { margin: 16px 0; }
+  .proof-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid #e8eaf6;
+  }
+  .step-num {
+    width: 36px; height: 36px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .step-content { flex: 1; }
+  .step-statement {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1rem;
+  }
+  .step-reason {
+    color: #666;
+    font-size: 0.88rem;
+    margin-top: 4px;
+  }
+
+  /* SVG diagrams */
+  .diagram-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+  }
+  .diagram-card {
+    background: #f8f9ff;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid #e8eaf6;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .diagram-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(26,35,126,0.12);
+    border-color: #9fa8da;
+  }
+  .diagram-card h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 12px;
+  }
+  .diagram-card p {
+    font-size: 0.82rem;
+    color: #666;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* Practice tasks */
+  .task-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 2px solid #e8eaf6;
+    transition: border-color 0.3s;
+  }
+  .task-card:hover { border-color: #9fa8da; }
+  .task-num {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .task-text { font-size: 1rem; line-height: 1.7; color: #333; margin-bottom: 16px; }
+
+  .answer-btn {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .answer-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(26,35,126,0.3); }
+  .answer-panel {
+    display: none;
+    margin-top: 16px;
+    background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+    border-radius: 12px;
+    padding: 16px 20px;
+    border-left: 4px solid var(--green);
+    font-weight: 600;
+    color: #2e7d32;
+    line-height: 1.7;
+  }
+  .answer-panel.visible { display: block; }
+
+  /* Quiz */
+  .quiz-container { margin: 20px 0; }
+  .quiz-question {
+    background: #f8f9ff;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .quiz-question.correct { border-color: var(--green); background: #e8f5e9; }
+  .quiz-question.wrong { border-color: var(--red); background: #ffebee; }
+  .q-text { font-size: 1.05rem; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .option-btn {
+    background: white;
+    border: 2px solid #c5cae9;
+    border-radius: 12px;
+    padding: 12px 16px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: all 0.2s;
+    color: #333;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--primary); background: #e8eaf6; }
+  .option-btn.correct-ans { background: var(--green); border-color: var(--green); color: white; }
+  .option-btn.wrong-ans { background: var(--red); border-color: var(--red); color: white; }
+  .q-feedback {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: none;
+  }
+  .q-feedback.show { display: block; }
+  
+  .quiz-score {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 20px;
+    padding: 28px;
+    text-align: center;
+    display: none;
+    margin-top: 20px;
+  }
+  .quiz-score.show { display: block; }
+  .score-number { font-size: 4rem; font-weight: 900; color: white; }
+  .score-text { color: rgba(255,255,255,0.9); font-size: 1.1rem; font-weight: 700; }
+
+  /* Highlight text */
+  .highlight { color: var(--accent2); font-weight: 800; }
+  .highlight-blue { color: var(--primary); font-weight: 800; }
+
+  /* Key points */
+  .key-points {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .key-point {
+    background: linear-gradient(135deg, #e8eaf6, #f3f4ff);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid #c5cae9;
+  }
+  .key-point .emoji { font-size: 2rem; margin-bottom: 8px; }
+  .key-point h4 { font-size: 0.95rem; font-weight: 800; color: var(--primary); }
+  .key-point p { font-size: 0.85rem; color: #555; margin-top: 6px; line-height: 1.5; }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 0;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    font-weight: 600;
+  }
+  .breadcrumb span { color: var(--accent); }
+
+  /* Notation */
+  .notation { font-style: italic; font-weight: 700; }
+
+  .section-header {
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-header::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,214,0,0.5), transparent);
+  }
+
+  @media (max-width: 600px) {
+    .header-inner { padding: 20px; flex-wrap: wrap; }
+    .grade-badge { margin-left: 0; }
+    header h1 { font-size: 1.4rem; }
+    .options { grid-template-columns: 1fr; }
+    .nav-tabs { padding: 12px 16px 0; }
+    .card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-icon">📐</div>
+    <div>
+      <h1>3.10 Үшбұрыш қабырғалары мен бұрыштарының байланысы</h1>
+      <p>Геометрия • Интерактивті сабақ</p>
+    </div>
+    <div class="grade-badge">7-сынып</div>
+  </div>
+</header>
+
+<nav class="nav-tabs">
+  <button class="nav-tab active" onclick="showSection('theory')">📚 Теория</button>
+  <button class="nav-tab" onclick="showSection('interactive')">🔬 Зерттеу</button>
+  <button class="nav-tab" onclick="showSection('proof')">✏️ Дәлелдеме</button>
+  <button class="nav-tab" onclick="showSection('practice')">📝 Есептер</button>
+  <button class="nav-tab" onclick="showSection('quiz')">🏆 Тест</button>
+</nav>
+
+<!-- ===== THEORY ===== -->
+<section id="theory" class="section active">
+  <div class="container">
+    <div class="breadcrumb">Геометрия → Үшбұрыш → <span>Қабырғалар мен бұрыштар</span></div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon icon-blue">💡</div>
+        Негізгі ұғымдар
+      </div>
+      <div class="theory-text">
+        Үшбұрышты зерттегенде оның <span class="highlight">қабырғалары мен бұрыштарының байланысын</span> зерттеу өте маңызды. 
+        Бұл байланысты білу арқылы біз үшбұрыштың белгісіз элементтерін таба аламыз.
+      </div>
+
+      <div class="theorem-box">
+        <p>Кез келген үшбұрышта үлкен қабырғаға қарсы үлкен бұрыш жатады,<br>
+        ал үлкен бұрышқа қарсы үлкен қабырға жатады.</p>
+      </div>
+
+      <div class="key-points">
+        <div class="key-point">
+          <div class="emoji">📏</div>
+          <h4>Үлкен қабырға</h4>
+          <p>Үлкен қабырғаға қарсы бұрыш та үлкен болады</p>
+        </div>
+        <div class="key-point">
+          <div class="emoji">📐</div>
+          <h4>Үлкен бұрыш</h4>
+          <p>Үлкен бұрышқа қарсы қабырға да үлкен болады</p>
+        </div>
+        <div class="key-point">
+          <div class="emoji">⚖️</div>
+          <h4>Тең қабырғалар</h4>
+          <p>Тең қабырғалардың қарсысындағы бұрыштар тең болады</p>
+        </div>
+        <div class="key-point">
+          <div class="emoji">🔁</div>
+          <h4>Кері теорема</h4>
+          <p>Теорема кері бағытта да дұрыс (екі жақты)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon icon-orange">🎨</div>
+        Графикалық түсіндірме
+      </div>
+
+      <div class="diagram-grid">
+        <div class="diagram-card">
+          <svg width="200" height="160" viewBox="0 0 200 160">
+            <!-- Triangle 1: AB > BC, so angle C > angle A -->
+            <defs>
+              <marker id="arr1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L6,3 z" fill="#e53935"/>
+              </marker>
+            </defs>
+            <polygon points="20,140 180,140 110,30" fill="#e8eaf6" stroke="#3949ab" stroke-width="2.5"/>
+            <!-- Side labels -->
+            <text x="100" y="158" text-anchor="middle" font-size="13" font-weight="800" fill="#e53935">a = 160</text>
+            <text x="155" y="95" font-size="13" font-weight="800" fill="#1e88e5">b = 95</text>
+            <text x="55" y="80" font-size="13" font-weight="800" fill="#43a047">c = 80</text>
+            <!-- Angle arcs -->
+            <path d="M 36,140 A 16,16 0 0,1 47,124" fill="none" stroke="#e53935" stroke-width="2.5"/>
+            <path d="M 163,140 A 16,16 0 0,0 153,124" fill="none" stroke="#1e88e5" stroke-width="2.5"/>
+            <!-- Labels -->
+            <text x="24" y="120" font-size="12" font-weight="800" fill="#e53935">A</text>
+            <text x="168" y="120" font-size="12" font-weight="800" fill="#1e88e5">C</text>
+            <text x="108" y="22" font-size="12" font-weight="800" fill="#43a047">B</text>
+          </svg>
+          <h4>a &gt; b &gt; c</h4>
+          <p>∠A &lt; ∠C &lt; ∠B (үлкен қабырғаға үлкен бұрыш)</p>
+        </div>
+
+        <div class="diagram-card">
+          <svg width="200" height="160" viewBox="0 0 200 160">
+            <!-- Isosceles triangle -->
+            <polygon points="100,20 30,145 170,145" fill="#fff3e0" stroke="#ff6f00" stroke-width="2.5"/>
+            <!-- Tick marks for equal sides -->
+            <line x1="62" y1="82" x2="74" y2="76" stroke="#ff6f00" stroke-width="3"/>
+            <line x1="138" y1="82" x2="126" y2="76" stroke="#ff6f00" stroke-width="3"/>
+            <!-- Base angles -->
+            <path d="M 48,145 A 18,18 0 0,1 56,128" fill="none" stroke="#43a047" stroke-width="2.5"/>
+            <path d="M 152,145 A 18,18 0 0,0 144,128" fill="none" stroke="#43a047" stroke-width="2.5"/>
+            <text x="96" y="14" font-size="12" font-weight="800" fill="#e53935">A</text>
+            <text x="18" y="158" font-size="12" font-weight="800" fill="#43a047">B</text>
+            <text x="172" y="158" font-size="12" font-weight="800" fill="#43a047">C</text>
+            <text x="85" y="172" font-size="11" fill="#ff6f00" font-weight="700" text-anchor="middle">AB = AC → ∠B = ∠C</text>
+          </svg>
+          <h4>Тең бүйірлі үшбұрыш</h4>
+          <p>Тең қабырғалардың қарсысындағы бұрыштар тең</p>
+        </div>
+
+        <div class="diagram-card">
+          <svg width="200" height="160" viewBox="0 0 200 160">
+            <!-- Scalene triangle with comparison arrows -->
+            <polygon points="25,145 175,145 140,35" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.5"/>
+            <text x="95" y="158" text-anchor="middle" font-size="12" font-weight="800" fill="#1b5e20">ең үлкен қабырға</text>
+            <!-- Arrows indicating angle sizes -->
+            <path d="M 42,145 A 20,20 0 0,1 52,126" fill="rgba(229,57,53,0.2)" stroke="#e53935" stroke-width="2"/>
+            <path d="M 157,145 A 28,28 0 0,0 136,132" fill="rgba(25,118,210,0.2)" stroke="#1976d2" stroke-width="2"/>
+            <text x="18" y="120" font-size="11" font-weight="800" fill="#e53935">кіші</text>
+            <text x="148" y="120" font-size="11" font-weight="800" fill="#1976d2">үлкен</text>
+            <text x="138" y="28" font-size="12" font-weight="800" fill="#43a047">B</text>
+          </svg>
+          <h4>Ереже тексеру</h4>
+          <p>Кіші бұрышқа қарсы — кіші қабырға</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon icon-green">📋</div>
+        Маңызды ережелер
+      </div>
+
+      <div class="rule-box">
+        <p><strong>1-ереже:</strong> Егер үшбұрышта <span class="highlight-blue">AB &gt; BC</span> болса, онда 
+        <span class="highlight">∠BCA &gt; ∠BAC</span> болады (AB қабырғасының қарсысындағы бұрыш үлкен).</p>
+      </div>
+
+      <div class="rule-box">
+        <p><strong>2-ереже:</strong> Егер үшбұрышта <span class="highlight-blue">∠A &gt; ∠B</span> болса, онда 
+        <span class="highlight">BC &gt; AC</span> болады (үлкен бұрыштың қарсысындағы қабырға үлкен).</p>
+      </div>
+
+      <div class="rule-box">
+        <p><strong>3-ереже:</strong> Үшбұрыштың қабырғаларын кему ретімен орналастыру үшін қарсысындағы бұрыштарды салыстыру керек. 
+        <span class="highlight">Үлкен бұрыш → үлкен қабырға.</span></p>
+      </div>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Берілген</th>
+            <th>Қорытынды</th>
+            <th>Мысал</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AB &gt; BC &gt; CA</td>
+            <td>∠C &gt; ∠A &gt; ∠B</td>
+            <td>AB=10, BC=7, CA=5<br>→ ∠C&gt;∠A&gt;∠B</td>
+          </tr>
+          <tr>
+            <td>∠A &gt; ∠B &gt; ∠C</td>
+            <td>BC &gt; CA &gt; AB</td>
+            <td>∠A=80°, ∠B=60°, ∠C=40°<br>→ BC&gt;CA&gt;AB</td>
+          </tr>
+          <tr>
+            <td>AB = AC</td>
+            <td>∠B = ∠C</td>
+            <td>Тең бүйірлі үшбұрыш</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INTERACTIVE ===== -->
+<section id="interactive" class="section">
+  <div class="container">
+    <div class="section-header">🔬 Интерактивті зерттеу</div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon icon-blue">🖱️</div>
+        Үшбұрыш сыза, байланысты зерттей!
+      </div>
+      <p style="color:#666; margin-bottom:16px; font-size:0.95rem;">
+        Нүктелерді сүйреп үшбұрышты өзгерт. Қабырғалар мен бұрыштардың байланысын бақыла!
+      </p>
+
+      <div class="canvas-wrap">
+        <canvas id="triangleCanvas" width="580" height="360"></canvas>
+      </div>
+
+      <div class="canvas-info" id="canvasInfo">
+        <div class="info-chip chip-a">∠A = –°</div>
+        <div class="info-chip chip-b">∠B = –°</div>
+        <div class="info-chip chip-c">∠C = –°</div>
+        <div class="info-chip chip-a">BC = –</div>
+        <div class="info-chip chip-b">CA = –</div>
+        <div class="info-chip chip-c">AB = –</div>
+      </div>
+
+      <div id="observationBox" style="margin-top:16px; background:#f8f9ff; border-radius:12px; padding:16px; border:2px solid #c5cae9; display:none;">
+        <strong style="color:var(--primary);">🔍 Байқаулар:</strong>
+        <p id="observationText" style="margin-top:8px; color:#333; font-size:0.95rem; line-height:1.6;"></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon icon-orange">📊</div>
+        Марат эксперименті (оқулықтан)
+      </div>
+      <p style="color:#444; line-height:1.7; font-size:0.95rem; margin-bottom:20px;">
+        Марат 45° бұрышты AOB бұрышын салды. Ол бұрыштың қабырғаларында A және B нүктелерін белгілеп, 
+        AB кесіндісінің ұзындығын өлшеді. Нәтижелерді кестеге жазды:
+      </p>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Сызба</th>
+            <th>AOB бұрышының шамасы</th>
+            <th>OA қабырғасының ұзындығы</th>
+            <th>OB қабырғасының ұзындығы</th>
+            <th>AB қабырғасының ұзындығы</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1 (α = 45°)</td>
+            <td>45°</td>
+            <td>4 бірлік</td>
+            <td>4 бірлік</td>
+            <td>≈ 3.1 бірлік</td>
+          </tr>
+          <tr>
+            <td>2 (α = 78°)</td>
+            <td>78°</td>
+            <td>4 бірлік</td>
+            <td>4 бірлік</td>
+            <td>≈ 5.5 бірлік</td>
+          </tr>
+          <tr>
+            <td>3 (α = 103°)</td>
+            <td>103°</td>
+            <td>4 бірлік</td>
+            <td>4 бірлік</td>
+            <td>≈ 6.7 бірлік</td>
+          </tr>
+          <tr>
+            <td>4 (α = 22°)</td>
+            <td>22°</td>
+            <td>4 бірлік</td>
+            <td>4 бірлік</td>
+            <td>≈ 1.5 бірлік</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="theorem-box" style="margin-top:16px;">
+        <p>Тұжырым: OA = OB болғанда, AOB бұрышы үлкен болған сайын AB қабырғасы да үлкен болады. 
+        Яғни, <strong>үлкен бұрышқа қарсы үлкен қабырға жатады!</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROOF ===== -->
+<section id="proof" class="section">
+  <div class="container">
+    <div class="section-header">✏️ Теорема дәлелдемесі</div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon icon-blue">📖</div>
+        Теорема (1-бөлім): AB &gt; BC ⟹ ∠BCA &gt; ∠BAC
+      </div>
+
+      <div style="display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start;">
+        <div style="flex:1; min-width:200px;">
+          <svg width="100%" viewBox="0 0 320 240" style="max-width:320px;">
+            <!-- Triangle ABC -->
+            <polygon points="30,210 290,210 220,30" fill="#e8eaf6" stroke="#3949ab" stroke-width="2"/>
+            <!-- D point on AB -->
+            <circle cx="160" cy="120" r="4" fill="#e53935"/>
+            <!-- BD line -->
+            <line x1="30" y1="210" x2="160" y2="120" stroke="#e53935" stroke-width="2" stroke-dasharray="5,3"/>
+            <!-- Labels -->
+            <text x="18" y="220" font-size="16" font-weight="800" fill="#333">A</text>
+            <text x="294" y="220" font-size="16" font-weight="800" fill="#333">B</text>
+            <text x="218" y="22" font-size="16" font-weight="800" fill="#333">C</text>
+            <text x="153" y="113" font-size="14" font-weight="800" fill="#e53935">D</text>
+            <!-- Angle arcs -->
+            <path d="M 50,210 A 20,20 0 0,1 62,192" fill="none" stroke="#e53935" stroke-width="2"/>
+            <text x="55" y="190" font-size="11" font-weight="700" fill="#e53935">∠1</text>
+            <path d="M 268,210 A 25,25 0 0,0 248,198" fill="none" stroke="#1e88e5" stroke-width="2"/>
+            <text x="244" y="193" font-size="11" font-weight="700" fill="#1e88e5">∠BCA</text>
+            <!-- tick marks -->
+            <line x1="120" y1="160" x2="130" y2="150" stroke="#ff6f00" stroke-width="3"/>
+            <line x1="235" y1="120" x2="245" y2="110" stroke="#ff6f00" stroke-width="3"/>
+            <text x="130" y="240" text-anchor="middle" font-size="11" fill="#666">BD = BC (тең қабырға)</text>
+          </svg>
+        </div>
+
+        <div style="flex:2; min-width:260px;">
+          <p style="color:#555; font-size:0.9rem; margin-bottom:12px; font-weight:600;">
+            <strong style="color:var(--primary);">Берілгені:</strong> △ABC, AB &gt; BC<br>
+            <strong style="color:var(--primary);">Дәлелдеу керек:</strong> ∠BCA &gt; ∠BAC
+          </p>
+
+          <div class="proof-steps">
+            <div class="proof-step">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <div class="step-statement">BD = BC болатындай етіп, BD кесіндісін саламыз</div>
+                <div class="step-reason">Берілген кесіндіге тең кесінді салу аксиомасы негізінде</div>
+              </div>
+            </div>
+            <div class="proof-step">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <div class="step-statement">∠1 = ∠2</div>
+                <div class="step-reason">BCD үшбұрышы теңбүйірлі болғандықтан (BD = BC)</div>
+              </div>
+            </div>
+            <div class="proof-step">
+              <div class="step-num">3</div>
+              <div class="step-content">
+                <div class="step-statement">∠BAC &lt; ∠1</div>
+                <div class="step-reason">Үшбұрыштың сыртқы бұрышы оған сыбайлас емес бұрыштан үлкен болғандықтан</div>
+              </div>
+            </div>
+            <div class="proof-step">
+              <div class="step-num">4</div>
+              <div class="step-content">
+                <div class="step-statement">∠2 + ∠3 = ∠BCA</div>
+                <div class="step-reason">Екі бұрыштың қосындысы ретінде</div>
+              </div>
+            </div>
+            <div class="proof-step">
+              <div class="step-num">5</div>
+              <div class="step-content">
+                <div class="step-statement">∠2 &lt; ∠BCA</div>
+                <div class="step-reason">∠2 бұрышы ∠BCA бұрышының бөлігі болғандықтан</div>
+              </div>
+            </div>
+            <div class="proof-step">
+              <div class="step-num">6</div>
+              <div class="step-content">
+                <div class="step-statement">∠1 &lt; ∠BCA</div>
+                <div class="step-reason">∠1 = ∠2 болғандықтан (2-қадамнан)</div>
+              </div>
+            </div>
+            <div class="proof-step" style="border-bottom:none;">
+              <div class="step-num" style="background:var(--green);">✓</div>
+              <div class="step-content">
+                <div class="step-statement" style="color:var(--green);">∠BCA &gt; ∠BAC — дәлелденді!</div>
+                <div class="step-reason">3 және 6-қадамдар негізінде: ∠BAC &lt; ∠1 &lt; ∠BCA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon icon-green">🔄</div>
+        Теорема (2-бөлім): ∠BCA &gt; ∠BAC ⟹ AB &gt; BC
+      </div>
+      <div class="theory-text">
+        <p style="margin-bottom:12px;">Кері теорема: Егер үшбұрышта бір бұрыш екіншіден үлкен болса, онда үлкен бұрышқа қарсы жатқан қабырға кіші бұрышқа қарсы жатқан қабырғадан үлкен болады.</p>
+        <p><strong>Дәлелдеу жоспары:</strong></p>
+      </div>
+
+      <div style="background:#f8f9ff; border-radius:12px; padding:16px; margin-top:12px; border:2px dashed #c5cae9;">
+        <p style="color:#555; font-size:0.95rem; line-height:1.8;">
+          <strong style="color:var(--primary);">Болжаймыз:</strong> ∠BCA &gt; ∠BAC, бірақ AB ≤ BC<br><br>
+          <strong style="color:#e53935;">1-жағдай:</strong> AB = BC болса → △ABC теңбүйірлі → ∠BCA = ∠BAC. Бірақ бұл шартқа қайшы! ✗<br><br>
+          <strong style="color:#e53935;">2-жағдай:</strong> AB &lt; BC болса → (1-бөлім теоремасы бойынша) ∠BCA &lt; ∠BAC. Бірақ бұл да шартқа қайшы! ✗<br><br>
+          <strong style="color:var(--green);">Қорытынды:</strong> Демек AB &gt; BC болуы керек. ✓
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRACTICE ===== -->
+<section id="practice" class="section">
+  <div class="container">
+    <div class="section-header">📝 Есептер мен жаттығулар</div>
+
+    <!-- Task 3 from textbook -->
+    <div class="task-card">
+      <div class="task-num">📌 3-тапсырма</div>
+      <div class="task-text">
+        <strong>ABD және BDC үшбұрыштарындағы бұрыштарды өсу ретімен орналастыр.</strong>
+        <br>Берілген: AB=22, BB'=28 (BD=28), BD=41 (ортаңғы), AD=31, DC=36 — сызбадағы мәндер.
+        <div style="text-align:center; margin:16px 0;">
+          <svg width="260" height="200" viewBox="0 0 260 200">
+            <polygon points="20,60 130,10 200,100 70,190" fill="#fff3e0" stroke="#ff6f00" stroke-width="2"/>
+            <line x1="130" y1="10" x2="70" y2="190" stroke="#e53935" stroke-width="2.5" stroke-dasharray="6,3"/>
+            <text x="10" y="60" font-size="13" font-weight="800" fill="#333">A</text>
+            <text x="133" y="8" font-size="13" font-weight="800" fill="#333">B</text>
+            <text x="203" y="103" font-size="13" font-weight="800" fill="#333">C</text>
+            <text x="64" y="200" font-size="13" font-weight="800" fill="#333">D</text>
+            <text x="60" y="28" font-size="12" fill="#e53935" font-weight="700">22</text>
+            <text x="170" y="42" font-size="12" fill="#1e88e5" font-weight="700">28</text>
+            <text x="190" y="155" font-size="12" fill="#43a047" font-weight="700">36</text>
+            <text x="20" y="130" font-size="12" fill="#ff6f00" font-weight="700">31</text>
+            <text x="108" y="115" font-size="12" fill="#e53935" font-weight="700">41</text>
+          </svg>
+        </div>
+      </div>
+      <button class="answer-btn" onclick="toggleAnswer(this)">✅ Жауапты көру</button>
+      <div class="answer-panel">
+        <strong>ABD үшбұрышы:</strong> Қабырғалар: AB=22, AD=31, BD=41<br>
+        BD &gt; AD &gt; AB, сондықтан қарсы бұрыштар:<br>
+        <span style="color:var(--green);">∠DAB &gt; ∠ABD &gt; ∠ADB</span><br><br>
+        <strong>BDC үшбұрышы:</strong> Қабырғалар: BC=28 (немесе есептеу), DC=36, BD=41<br>
+        BD &gt; DC &gt; BC, сондықтан:<br>
+        <span style="color:var(--green);">∠BCD &gt; ∠DBC &gt; ∠BDC</span>
+      </div>
+    </div>
+
+    <!-- Task 5 -->
+    <div class="task-card">
+      <div class="task-num">📌 5-тапсырма (а)</div>
+      <div class="task-text">
+        <strong>ABC үшбұрышының бұрыштарын өсу ретімен орналастыр:</strong><br>
+        AB = 11 см; BC = 8 см; AC = 9 см
+      </div>
+      <button class="answer-btn" onclick="toggleAnswer(this)">✅ Жауапты көру</button>
+      <div class="answer-panel">
+        Қабырғаларды кему ретімен: AB = 11 &gt; AC = 9 &gt; BC = 8<br><br>
+        Үлкен қабырғаға қарсы үлкен бұрыш жатады:<br>
+        • AB (11 см) — ең үлкен → қарсысындағы ∠C — ең үлкен<br>
+        • AC (9 см) — орташа → қарсысындағы ∠B — орташа<br>
+        • BC (8 см) — ең кіші → қарсысындағы ∠A — ең кіші<br><br>
+        <span style="color:var(--green);">Жауап: ∠A &lt; ∠B &lt; ∠C</span>
+      </div>
+    </div>
+
+    <!-- Task 5b -->
+    <div class="task-card">
+      <div class="task-num">📌 5-тапсырма (б)</div>
+      <div class="task-text">
+        <strong>Берілген: P = 48, қабырғалар: 3x, 3x+1, 4x−3. Бұрыштарды өсу ретімен орналастыр.</strong>
+        <div style="text-align:center; margin:16px 0;">
+          <svg width="220" height="170" viewBox="0 0 220 170">
+            <polygon points="110,10 20,155 200,155" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+            <text x="107" y="6" font-size="12" font-weight="800" fill="#333">B</text>
+            <text x="8" y="162" font-size="12" font-weight="800" fill="#333">A</text>
+            <text x="204" y="162" font-size="12" font-weight="800" fill="#333">C</text>
+            <text x="50" y="78" font-size="13" font-weight="800" fill="#e53935">3x</text>
+            <text x="155" y="78" font-size="13" font-weight="800" fill="#1e88e5">3x+1</text>
+            <text x="95" y="168" font-size="13" font-weight="800" fill="#43a047">4x−3</text>
+            <text x="100" y="140" font-size="11" fill="#666" text-anchor="middle">P = 48</text>
+          </svg>
+        </div>
+      </div>
+      <button class="answer-btn" onclick="toggleAnswer(this)">✅ Жауапты көру</button>
+      <div class="answer-panel">
+        <strong>Теңдеу құрамыз:</strong><br>
+        3x + (3x+1) + (4x−3) = 48<br>
+        10x − 2 = 48<br>
+        10x = 50<br>
+        x = 5<br><br>
+        <strong>Қабырғалар:</strong><br>
+        AB = 3·5 = 15 см<br>
+        BC = 3·5 + 1 = 16 см<br>
+        AC = 4·5 − 3 = 17 см<br><br>
+        AC &gt; BC &gt; AB, сондықтан:<br>
+        <span style="color:var(--green);">Жауап: ∠B &lt; ∠A &lt; ∠C</span>
+      </div>
+    </div>
+
+    <!-- Task 6 -->
+    <div class="task-card">
+      <div class="task-num">📌 6-тапсырма (а)</div>
+      <div class="task-text">
+        <strong>PQR үшбұрышының қабырғаларын салыстыр:</strong><br>
+        ∠P = 38°, ∠Q = 67°
+      </div>
+      <button class="answer-btn" onclick="toggleAnswer(this)">✅ Жауапты көру</button>
+      <div class="answer-panel">
+        <strong>Үшінші бұрышты табамыз:</strong><br>
+        ∠R = 180° − 38° − 67° = 75°<br><br>
+        Бұрыштарды кему ретімен: ∠R = 75° &gt; ∠Q = 67° &gt; ∠P = 38°<br><br>
+        Үлкен бұрышқа қарсы үлкен қабырға:<br>
+        • ∠R (75°) — ең үлкен → қарсысындағы PQ — ең үлкен<br>
+        • ∠Q (67°) — орташа → қарсысындағы PR — орташа<br>
+        • ∠P (38°) — ең кіші → қарсысындағы QR — ең кіші<br><br>
+        <span style="color:var(--green);">Жауап: QR &lt; PR &lt; PQ</span>
+      </div>
+    </div>
+
+    <div class="task-card">
+      <div class="task-num">📌 6-тапсырма (ə)</div>
+      <div class="task-text">
+        <strong>PQR үшбұрышының қабырғаларын салыстыр:</strong><br>
+        ∠P = 132°, ∠R = 24°
+      </div>
+      <button class="answer-btn" onclick="toggleAnswer(this)">✅ Жауапты көру</button>
+      <div class="answer-panel">
+        <strong>Үшінші бұрышты табамыз:</strong><br>
+        ∠Q = 180° − 132° − 24° = 24°<br><br>
+        ∠P = 132° &gt; ∠Q = 24° = ∠R = 24°<br><br>
+        • ∠P — ең үлкен → QR — ең үлкен<br>
+        • ∠Q = ∠R → PR = PQ (тең бұрыштардың қарсысы)<br><br>
+        <span style="color:var(--green);">Жауап: PQ = PR &lt; QR</span>
+      </div>
+    </div>
+
+    <!-- Task 4 proof -->
+    <div class="task-card">
+      <div class="task-num">📌 4-тапсырма — Дәлелде</div>
+      <div class="task-text">
+        <strong>Егер AB &gt; AC болса, онда ∠1 &gt; ∠2 болады екенін дәлелде.</strong>
+        (∠1 = ∠ABC, ∠2 = ∠ACB — А бұрышынан қараудан B мен C жаққа)
+        <div style="text-align:center; margin:16px 0;">
+          <svg width="200" height="150" viewBox="0 0 200 150">
+            <polygon points="100,10 20,135 180,135" fill="#e8eaf6" stroke="#3949ab" stroke-width="2"/>
+            <text x="97" y="6" font-size="14" font-weight="800" fill="#333">A</text>
+            <text x="8" y="148" font-size="14" font-weight="800" fill="#e53935">B</text>
+            <text x="184" y="148" font-size="14" font-weight="800" fill="#1e88e5">C</text>
+            <path d="M 37,135 A 18,18 0 0,1 47,118" fill="none" stroke="#e53935" stroke-width="2"/>
+            <path d="M 163,135 A 18,18 0 0,0 153,118" fill="none" stroke="#1e88e5" stroke-width="2"/>
+            <text x="30" y="114" font-size="12" font-weight="800" fill="#e53935">∠1</text>
+            <text x="153" y="114" font-size="12" font-weight="800" fill="#1e88e5">∠2</text>
+          </svg>
+        </div>
+      </div>
+      <button class="answer-btn" onclick="toggleAnswer(this)">✅ Дәлелдемені көру</button>
+      <div class="answer-panel">
+        <strong>Берілгені:</strong> △ABC, AB &gt; AC<br>
+        <strong>Дәлелдеу керек:</strong> ∠ABC &gt; ∠ACB (яғни ∠1 &gt; ∠2)<br><br>
+        Теорема бойынша: <em>Үшбұрышта үлкен қабырғаға қарсы үлкен бұрыш жатады.</em><br><br>
+        AB қабырғасының қарсысындағы бұрыш = ∠ACB (∠2)<br>
+        AC қабырғасының қарсысындағы бұрыш = ∠ABC (∠1)<br><br>
+        AB &gt; AC болғандықтан, қарсысындағы бұрыштар:<br>
+        <span style="color:var(--green);">∠ACB &gt; ∠ABC, яғни ∠2 &gt; ∠1 — дәлелденді! ✓</span>
+        <br><small style="color:#888;">(Немесе ∠1 = ∠ABC — B дегенде, ∠2 = ∠ACB — C дегенде; AB&gt;AC → ∠C&gt;∠B → ∠2&gt;∠1)</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== QUIZ ===== -->
+<section id="quiz" class="section">
+  <div class="container">
+    <div class="section-header">🏆 Білімді тексер</div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon icon-blue">❓</div>
+        Тест сұрақтары
+      </div>
+
+      <div class="quiz-container" id="quizContainer">
+
+        <div class="quiz-question" data-correct="1">
+          <div class="q-text">1. ABC үшбұрышында AB = 15, BC = 10, AC = 12. Бұрыштарды кему ретімен орналастыр:</div>
+          <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, 0)">∠B &gt; ∠C &gt; ∠A</button>
+            <button class="option-btn" onclick="checkAnswer(this, 1)">∠C &gt; ∠A &gt; ∠B</button>
+            <button class="option-btn" onclick="checkAnswer(this, 2)">∠A &gt; ∠B &gt; ∠C</button>
+            <button class="option-btn" onclick="checkAnswer(this, 3)">∠A &gt; ∠C &gt; ∠B</button>
+          </div>
+          <div class="q-feedback">
+            <span class="feedback-icon"></span>
+            AB=15 (ең үлкен) → қарсысындағы ∠C (ең үлкен). AC=12 → ∠B орташа. BC=10 (ең кіші) → ∠A ең кіші.
+          </div>
+        </div>
+
+        <div class="quiz-question" data-correct="2">
+          <div class="q-text">2. △PQR-де ∠P = 50°, ∠Q = 70°. Қабырғаларды өсу ретімен орналастыр:</div>
+          <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, 0)">QR &lt; PR &lt; PQ</button>
+            <button class="option-btn" onclick="checkAnswer(this, 1)">PQ &lt; PR &lt; QR</button>
+            <button class="option-btn" onclick="checkAnswer(this, 2)">PR &lt; QR &lt; PQ</button>
+            <button class="option-btn" onclick="checkAnswer(this, 3)">QR &lt; PQ &lt; PR</button>
+          </div>
+          <div class="q-feedback">
+            ∠R = 180°-50°-70° = 60°. Бұрыштар: ∠P=50° &lt; ∠R=60° &lt; ∠Q=70°. 
+            Қарсысындағы қабырғалар: QR &lt; PQ ... Дұрысы: ∠P(50°)→QR, ∠R(60°)→PQ, ∠Q(70°)→PR. 
+            Өсу ретімен: QR&lt;PQ&lt;PR.
+          </div>
+        </div>
+
+        <div class="quiz-question" data-correct="0">
+          <div class="q-text">3. Үшбұрышта ең үлкен бұрышқа қарсы жатқан қабырға қандай болады?</div>
+          <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, 0)">Ең үлкен</button>
+            <button class="option-btn" onclick="checkAnswer(this, 1)">Ең кіші</button>
+            <button class="option-btn" onclick="checkAnswer(this, 2)">Орташа</button>
+            <button class="option-btn" onclick="checkAnswer(this, 3)">Тең</button>
+          </div>
+          <div class="q-feedback">Теорема: Үлкен бұрышқа қарсы үлкен қабырға жатады!</div>
+        </div>
+
+        <div class="quiz-question" data-correct="3">
+          <div class="q-text">4. Теңбүйірлі үшбұрышта AB = AC болса, қандай қорытынды жасауға болады?</div>
+          <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, 0)">∠A = ∠B</button>
+            <button class="option-btn" onclick="checkAnswer(this, 1)">∠A = ∠C</button>
+            <button class="option-btn" onclick="checkAnswer(this, 2)">∠A &gt; ∠B</button>
+            <button class="option-btn" onclick="checkAnswer(this, 3)">∠B = ∠C</button>
+          </div>
+          <div class="q-feedback">AB = AC болса, AB қабырғасының қарсысы ∠C, ал AC қабырғасының қарсысы ∠B. Тең қабырғалардың қарсысы тең: ∠B = ∠C.</div>
+        </div>
+
+        <div class="quiz-question" data-correct="1">
+          <div class="q-text">5. △ABC-де ∠A = 40°, ∠B = 100°. Қай қабырға ең ұзын?</div>
+          <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, 0)">AB</button>
+            <button class="option-btn" onclick="checkAnswer(this, 1)">AC</button>
+            <button class="option-btn" onclick="checkAnswer(this, 2)">BC</button>
+            <button class="option-btn" onclick="checkAnswer(this, 3)">Барлығы тең</button>
+          </div>
+          <div class="q-feedback">∠C = 180°-40°-100° = 40°. Ең үлкен бұрыш ∠B = 100°. ∠B-ның қарсысындағы қабырға — AC. Демек AC ең ұзын!</div>
+        </div>
+
+      </div>
+
+      <div class="quiz-score" id="quizScore">
+        <div class="score-number" id="scoreNum">0/5</div>
+        <div class="score-text" id="scoreText">Нәтиже</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ===== Navigation =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ===== Answer toggle =====
+function toggleAnswer(btn) {
+  const panel = btn.nextElementSibling;
+  panel.classList.toggle('visible');
+  btn.textContent = panel.classList.contains('visible') ? '🙈 Жабу' : '✅ Жауапты көру';
+}
+
+// ===== Interactive Canvas =====
+const canvas = document.getElementById('triangleCanvas');
+const ctx = canvas.getContext('2d');
+
+// Responsive canvas
+function resizeCanvas() {
+  const wrap = canvas.parentElement;
+  const w = Math.min(580, wrap.clientWidth - 40);
+  canvas.width = w;
+  canvas.height = Math.round(w * 0.62);
+  draw();
+}
+
+let pts = [
+  {x: 0.5, y: 0.15},  // A (top)
+  {x: 0.15, y: 0.82}, // B (bottom-left)
+  {x: 0.85, y: 0.82}  // C (bottom-right)
+];
+
+let dragging = -1;
+const colors = ['#e53935', '#1e88e5', '#43a047'];
+const labels = ['A', 'B', 'C'];
+
+function getPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches ? e.touches[0] : e;
+  return {
+    x: (touch.clientX - rect.left) / canvas.width,
+    y: (touch.clientY - rect.top) / canvas.height
+  };
+}
+
+function dist2(p1, p2) {
+  return Math.hypot(p1.x - p2.x, p1.y - p2.y);
+}
+
+function getAngle(a, b, c) {
+  const v1 = {x: a.x - b.x, y: a.y - b.y};
+  const v2 = {x: c.x - b.x, y: c.y - b.y};
+  const dot = v1.x*v2.x + v1.y*v2.y;
+  const mag = Math.sqrt((v1.x**2+v1.y**2)*(v2.x**2+v2.y**2));
+  return Math.acos(Math.max(-1, Math.min(1, dot/mag))) * 180 / Math.PI;
+}
+
+function draw() {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(197,202,233,0.4)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x <= W; x += W/12) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y <= H; y += H/8) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  const p = pts.map(pt => ({x: pt.x * W, y: pt.y * H}));
+  const [A, B, C] = p;
+
+  // Fill
+  ctx.beginPath();
+  ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.lineTo(C.x, C.y);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(232,234,246,0.8)';
+  ctx.fill();
+
+  // Sides
+  const sideColors = ['#e53935', '#1e88e5', '#43a047'];
+  const sidePairs = [[A,B],[B,C],[C,A]];
+  sidePairs.forEach(([p1,p2], i) => {
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
+    ctx.strokeStyle = sideColors[i]; ctx.lineWidth = 3;
+    ctx.stroke();
+  });
+
+  // Points
+  p.forEach((pt, i) => {
+    ctx.beginPath();
+    ctx.arc(pt.x, pt.y, dragging===i ? 12 : 9, 0, Math.PI*2);
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    ctx.strokeStyle = 'white'; ctx.lineWidth = 2.5;
+    ctx.stroke();
+    
+    // Label
+    ctx.font = 'bold 16px Nunito';
+    ctx.fillStyle = colors[i];
+    const offsets = [{x:-20,y:-12},{x:-20,y:20},{x:10,y:20}];
+    ctx.fillText(labels[i], pt.x + offsets[i].x, pt.y + offsets[i].y);
+  });
+
+  // Compute lengths and angles
+  const lenAB = dist2(pts[0], pts[1]) * Math.sqrt(W*W + H*H) * 0.1;
+  const lenBC = dist2(pts[1], pts[2]) * Math.sqrt(W*W + H*H) * 0.1;
+  const lenCA = dist2(pts[2], pts[0]) * Math.sqrt(W*W + H*H) * 0.1;
+
+  const angA = getAngle(pts[2], pts[0], pts[1]);
+  const angB = getAngle(pts[0], pts[1], pts[2]);
+  const angC = getAngle(pts[1], pts[2], pts[0]);
+
+  // Side labels
+  const midAB = {x: (A.x+B.x)/2, y: (A.y+B.y)/2};
+  const midBC = {x: (B.x+C.x)/2, y: (B.y+C.y)/2};
+  const midCA = {x: (C.x+A.x)/2, y: (C.y+A.y)/2};
+
+  ctx.font = 'bold 13px Nunito';
+  ctx.fillStyle = '#e53935';
+  ctx.fillText('AB=' + lenAB.toFixed(1), midAB.x - 24, midAB.y);
+  ctx.fillStyle = '#1e88e5';
+  ctx.fillText('BC=' + lenBC.toFixed(1), midBC.x - 24, midBC.y + 18);
+  ctx.fillStyle = '#43a047';
+  ctx.fillText('CA=' + lenCA.toFixed(1), midCA.x + 6, midCA.y);
+
+  // Update chips
+  const chips = document.querySelectorAll('.info-chip');
+  chips[0].textContent = '∠A = ' + angA.toFixed(1) + '°';
+  chips[1].textContent = '∠B = ' + angB.toFixed(1) + '°';
+  chips[2].textContent = '∠C = ' + angC.toFixed(1) + '°';
+  chips[3].textContent = 'BC = ' + lenBC.toFixed(1);
+  chips[4].textContent = 'CA = ' + lenCA.toFixed(1);
+  chips[5].textContent = 'AB = ' + lenAB.toFixed(1);
+
+  // Observation
+  const obs = document.getElementById('observationBox');
+  const obsText = document.getElementById('observationText');
+  obs.style.display = 'block';
+  
+  let text = '';
+  const maxLen = Math.max(lenAB, lenBC, lenCA);
+  const minAng = Math.min(angA, angB, angC);
+  const maxAng = Math.max(angA, angB, angC);
+  
+  if (lenAB > lenBC && lenAB > lenCA) {
+    text += `✅ AB = ${lenAB.toFixed(1)} — ең үзын қабырға. Оның қарсысындағы ∠C = ${angC.toFixed(1)}° ең үлкен бұрыш!\n`;
+  } else if (lenBC > lenAB && lenBC > lenCA) {
+    text += `✅ BC = ${lenBC.toFixed(1)} — ең үзын қабырға. Оның қарсысындағы ∠A = ${angA.toFixed(1)}° ең үлкен бұрыш!\n`;
+  } else if (lenCA > lenAB && lenCA > lenBC) {
+    text += `✅ CA = ${lenCA.toFixed(1)} — ең үзын қабырға. Оның қарсысындағы ∠B = ${angB.toFixed(1)}° ең үлкен бұрыш!\n`;
+  }
+  
+  obsText.textContent = text || 'Нүктелерді жылжытып үшбұрышты өзгерт!';
+}
+
+canvas.addEventListener('mousedown', e => {
+  const pos = getPos(e);
+  dragging = pts.findIndex(p => dist2(p, pos) < 0.05);
+});
+canvas.addEventListener('mousemove', e => {
+  if (dragging === -1) return;
+  const pos = getPos(e);
+  pts[dragging] = {
+    x: Math.max(0.05, Math.min(0.95, pos.x)),
+    y: Math.max(0.05, Math.min(0.95, pos.y))
+  };
+  draw();
+  canvas.style.cursor = 'grabbing';
+});
+canvas.addEventListener('mouseup', () => { dragging = -1; canvas.style.cursor = 'crosshair'; });
+canvas.addEventListener('touchstart', e => { e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mousedown', {clientX: e.touches[0].clientX, clientY: e.touches[0].clientY})); });
+canvas.addEventListener('touchmove', e => { e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mousemove', {clientX: e.touches[0].clientX, clientY: e.touches[0].clientY})); });
+canvas.addEventListener('touchend', () => { dragging = -1; });
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// ===== Quiz =====
+let score = 0;
+let answered = 0;
+const total = document.querySelectorAll('.quiz-question').length;
+
+function checkAnswer(btn, idx) {
+  const qEl = btn.closest('.quiz-question');
+  if (qEl.querySelector('.correct-ans')) return; // already answered
+
+  const correct = parseInt(qEl.dataset.correct);
+  const options = qEl.querySelectorAll('.option-btn');
+  
+  options.forEach(b => b.disabled = true);
+  options[correct].classList.add('correct-ans');
+  
+  const fb = qEl.querySelector('.q-feedback');
+  fb.classList.add('show');
+  
+  if (idx === correct) {
+    btn.classList.add('correct-ans');
+    fb.style.color = '#2e7d32';
+    fb.innerHTML = '✅ Дұрыс! ' + fb.innerHTML;
+    qEl.classList.add('correct');
+    score++;
+  } else {
+    btn.classList.add('wrong-ans');
+    fb.style.color = '#c62828';
+    fb.innerHTML = '❌ Қате. ' + fb.innerHTML;
+    qEl.classList.add('wrong');
+  }
+  
+  answered++;
+  if (answered === total) showScore();
+}
+
+function showScore() {
+  const scoreEl = document.getElementById('quizScore');
+  const numEl = document.getElementById('scoreNum');
+  const textEl = document.getElementById('scoreText');
+  
+  scoreEl.classList.add('show');
+  numEl.textContent = score + '/' + total;
+  
+  if (score === total) textEl.textContent = '🎉 Керемет! Барлығын дұрыс жауаптадың!';
+  else if (score >= total * 0.8) textEl.textContent = '👏 Жақсы! Материалды жақсы меңгергенсің!';
+  else if (score >= total * 0.6) textEl.textContent = '📚 Жарайды! Теорияны қайталап шық.';
+  else textEl.textContent = '💪 Тырыс! Теорема бөлімін қайта оқы.';
+}
+</script>
+</body>
+</html>
