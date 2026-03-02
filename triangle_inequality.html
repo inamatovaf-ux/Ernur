@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3.11 Үшбұрыштың теңсіздігі</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2234;
+  --card: #1e2a3a;
+  --border: rgba(99,179,237,0.15);
+  --primary: #38bdf8;
+  --primary-dim: rgba(56,189,248,0.12);
+  --accent: #f59e0b;
+  --accent-dim: rgba(245,158,11,0.12);
+  --green: #34d399;
+  --green-dim: rgba(52,211,153,0.12);
+  --red: #f87171;
+  --red-dim: rgba(248,113,113,0.12);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.12);
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* Animated background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  animation: drift 20s ease-in-out infinite alternate;
+}
+.orb1 { width: 500px; height: 500px; background: rgba(56,189,248,0.06); top: -200px; left: -100px; }
+.orb2 { width: 400px; height: 400px; background: rgba(245,158,11,0.05); bottom: -150px; right: -100px; animation-delay: -10s; }
+.orb3 { width: 300px; height: 300px; background: rgba(167,139,250,0.04); top: 50%; left: 50%; animation-delay: -5s; }
+
+@keyframes drift {
+  from { transform: translate(0,0) scale(1); }
+  to { transform: translate(30px, 20px) scale(1.1); }
+}
+
+.page { position: relative; z-index: 1; }
+
+/* Header */
+header {
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.header-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(56,189,248,0.08) 0%, transparent 60%);
+}
+.header-content {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 32px 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.header-badge {
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  border-radius: 16px;
+  width: 64px; height: 64px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  flex-shrink: 0;
+  box-shadow: 0 0 30px rgba(56,189,248,0.3);
+}
+.header-text h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #38bdf8, #7dd3fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+.header-text p { color: var(--text-muted); font-size: 0.95rem; margin-top: 4px; }
+.header-meta {
+  margin-left: auto;
+  display: flex; gap: 10px; flex-shrink: 0; flex-wrap: wrap;
+}
+.meta-chip {
+  background: var(--primary-dim);
+  border: 1px solid rgba(56,189,248,0.25);
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Nav */
+.nav-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-btn {
+  padding: 16px 22px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.25s;
+}
+.nav-btn:hover { color: var(--primary); }
+.nav-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* Main layout */
+.main { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* Section */
+.section { display: none; animation: fadeIn 0.35s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+}
+.card.accent-orange::before { background: linear-gradient(90deg, var(--accent), transparent); }
+.card.accent-green::before { background: linear-gradient(90deg, var(--green), transparent); }
+.card.accent-purple::before { background: linear-gradient(90deg, var(--purple), transparent); }
+.card.accent-red::before { background: linear-gradient(90deg, var(--red), transparent); }
+
+.card-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-title .ti {
+  font-size: 1.3rem;
+}
+
+/* Theorem box */
+.theorem {
+  background: var(--primary-dim);
+  border: 1px solid rgba(56,189,248,0.3);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin: 16px 0;
+  position: relative;
+}
+.theorem::before {
+  content: 'ТЕОРЕМА';
+  position: absolute;
+  top: -10px; left: 16px;
+  background: var(--primary);
+  color: var(--bg);
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 10px;
+  border-radius: 50px;
+  letter-spacing: 2px;
+}
+.theorem p {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--primary);
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* Info boxes */
+.info-box {
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  border-left: 3px solid;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.info-box.blue { background: var(--primary-dim); border-color: var(--primary); color: #7dd3fc; }
+.info-box.orange { background: var(--accent-dim); border-color: var(--accent); color: #fcd34d; }
+.info-box.green { background: var(--green-dim); border-color: var(--green); color: #6ee7b7; }
+.info-box.red { background: var(--red-dim); border-color: var(--red); color: #fca5a5; }
+.info-box.purple { background: var(--purple-dim); border-color: var(--purple); color: #c4b5fd; }
+
+/* Text styles */
+.text { color: var(--text-muted); font-size: 0.97rem; line-height: 1.8; }
+.hl { color: var(--primary); font-weight: 700; }
+.hl-o { color: var(--accent); font-weight: 700; }
+.hl-g { color: var(--green); font-weight: 700; }
+
+/* Grid layouts */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+/* Key point cards */
+.kp {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.kp:hover { transform: translateY(-4px); border-color: var(--primary); }
+.kp .emoji { font-size: 2.2rem; margin-bottom: 10px; }
+.kp h4 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.kp p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+/* SVG diagrams */
+.diagram-wrap {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  margin: 16px 0;
+}
+.diagram-wrap h4 { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-top: 10px; }
+
+/* Interactive canvas */
+.canvas-container {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  margin: 20px 0;
+}
+canvas { border-radius: 12px; display: block; margin: 0 auto; }
+
+.info-chips {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 16px;
+}
+.chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 6px 16px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.chip.blue { border-color: rgba(56,189,248,0.4); color: var(--primary); }
+.chip.orange { border-color: rgba(245,158,11,0.4); color: var(--accent); }
+.chip.green { border-color: rgba(52,211,153,0.4); color: var(--green); }
+.chip.valid { border-color: rgba(52,211,153,0.5); color: var(--green); background: var(--green-dim); }
+.chip.invalid { border-color: rgba(248,113,113,0.5); color: var(--red); background: var(--red-dim); }
+
+/* Proof steps */
+.proof-step {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.proof-step:last-child { border-bottom: none; }
+.step-n {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--primary-dim);
+  border: 1px solid rgba(56,189,248,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+.step-n.done { background: var(--green-dim); border-color: rgba(52,211,153,0.4); color: var(--green); }
+.step-stmt { font-weight: 700; color: var(--text); font-size: 0.97rem; }
+.step-why { font-size: 0.85rem; color: var(--text-muted); margin-top: 3px; }
+
+/* Tasks */
+.task {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 18px;
+  transition: border-color 0.2s;
+}
+.task:hover { border-color: rgba(56,189,248,0.3); }
+.task-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+}
+.task-num {
+  background: linear-gradient(135deg, var(--primary), #0ea5e9);
+  color: var(--bg);
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.task-title { font-weight: 700; color: var(--text); font-size: 1rem; }
+.task-text { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 14px; }
+
+.show-btn {
+  background: var(--primary-dim);
+  border: 1px solid rgba(56,189,248,0.3);
+  color: var(--primary);
+  padding: 9px 20px;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.show-btn:hover { background: rgba(56,189,248,0.2); }
+.answer-box {
+  display: none;
+  margin-top: 14px;
+  background: var(--green-dim);
+  border: 1px solid rgba(52,211,153,0.3);
+  border-radius: 12px;
+  padding: 16px 18px;
+  color: #6ee7b7;
+  font-size: 0.93rem;
+  line-height: 1.8;
+}
+.answer-box.show { display: block; }
+
+/* Inequality checker */
+.checker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 16px 0;
+}
+.input-group label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+.input-group input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input-group input:focus { border-color: var(--primary); }
+.check-btn {
+  background: linear-gradient(135deg, var(--primary), #0ea5e9);
+  color: var(--bg);
+  border: none;
+  padding: 13px 30px;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.check-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(56,189,248,0.3); }
+.result-display {
+  margin-top: 20px;
+  border-radius: 16px;
+  padding: 20px;
+  display: none;
+  text-align: center;
+}
+.result-display.valid { background: var(--green-dim); border: 1px solid rgba(52,211,153,0.3); }
+.result-display.invalid { background: var(--red-dim); border: 1px solid rgba(248,113,113,0.3); }
+.result-icon { font-size: 2.5rem; margin-bottom: 8px; }
+.result-text { font-size: 1.1rem; font-weight: 700; }
+.result-valid { color: var(--green); }
+.result-invalid { color: var(--red); }
+.result-detail { font-size: 0.88rem; color: var(--text-muted); margin-top: 6px; line-height: 1.7; }
+
+/* Third side finder */
+.range-display {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 14px;
+  display: none;
+}
+.range-display.show { display: block; }
+.range-line {
+  display: flex; align-items: center; gap: 10px;
+  margin: 6px 0;
+  font-size: 0.93rem;
+}
+.range-label { color: var(--text-muted); min-width: 100px; }
+.range-value { font-weight: 700; color: var(--accent); font-size: 1.05rem; }
+
+/* Table */
+.styled-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 14px 0;
+}
+.styled-table th {
+  background: rgba(56,189,248,0.15);
+  color: var(--primary);
+  padding: 12px 16px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 1px solid rgba(56,189,248,0.2);
+}
+.styled-table td {
+  padding: 11px 16px;
+  text-align: center;
+  font-size: 0.93rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.styled-table tr:last-child td { border-bottom: none; }
+.styled-table tr:nth-child(odd) td { background: rgba(255,255,255,0.02); }
+.styled-table .yes { color: var(--green); font-weight: 700; }
+.styled-table .no { color: var(--red); font-weight: 700; }
+
+/* Quiz */
+.q-block {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 18px;
+  transition: border-color 0.3s;
+}
+.q-block.correct { border-color: rgba(52,211,153,0.5); }
+.q-block.wrong { border-color: rgba(248,113,113,0.5); }
+.q-text { font-weight: 700; color: var(--text); font-size: 1rem; margin-bottom: 14px; line-height: 1.5; }
+.q-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.q-opt {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.q-opt:hover:not(:disabled) { border-color: var(--primary); color: var(--text); }
+.q-opt.correct-opt { background: var(--green-dim); border-color: var(--green); color: var(--green); font-weight: 700; }
+.q-opt.wrong-opt { background: var(--red-dim); border-color: var(--red); color: var(--red); font-weight: 700; }
+.q-fb { display: none; margin-top: 10px; font-size: 0.85rem; color: var(--text-muted); padding: 10px 14px; background: var(--surface); border-radius: 8px; line-height: 1.6; }
+.q-fb.show { display: block; }
+
+.score-card {
+  display: none;
+  background: var(--card);
+  border: 1px solid rgba(56,189,248,0.3);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  margin-top: 24px;
+}
+.score-card.show { display: block; }
+.score-big { font-size: 5rem; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.score-label { color: var(--text-muted); font-size: 1.1rem; margin-top: 8px; }
+
+/* Section headers */
+.sec-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 28px;
+}
+.sec-head h2 {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--text), var(--text-muted));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.sec-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+
+/* Rope animation */
+.rope-viz {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 16px 0;
+}
+.rope-slider-wrap { margin: 12px 0; }
+.rope-slider-wrap label { font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: space-between; margin-bottom: 6px; }
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface);
+  outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .grid2, .grid3, .checker-grid, .q-opts { grid-template-columns: 1fr; }
+  .header-content { flex-wrap: wrap; }
+  .header-meta { margin-left: 0; }
+  .header-text h1 { font-size: 1.4rem; }
+  .main { padding: 24px 16px 60px; }
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="page">
+<header>
+  <div class="header-glow"></div>
+  <div class="header-content">
+    <div class="header-badge">📐</div>
+    <div class="header-text">
+      <h1>3.11 Үшбұрыштың теңсіздігі</h1>
+      <p>Геометрия • 7-сынып • Интерактивті сабақ</p>
+    </div>
+    <div class="header-meta">
+      <span class="meta-chip">📚 Теория</span>
+      <span class="meta-chip">🔬 Зерттеу</span>
+      <span class="meta-chip">🧩 Есептер</span>
+      <span class="meta-chip">🏆 Тест</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showTab('theory',this)">📖 Теория</button>
+    <button class="nav-btn" onclick="showTab('interactive',this)">🔬 Интерактив</button>
+    <button class="nav-btn" onclick="showTab('proof',this)">✏️ Дәлелдеме</button>
+    <button class="nav-btn" onclick="showTab('checker',this)">🔍 Тексеруші</button>
+    <button class="nav-btn" onclick="showTab('tasks',this)">📝 Есептер</button>
+    <button class="nav-btn" onclick="showTab('quiz',this)">🏆 Тест</button>
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- ===== THEORY ===== -->
+<section id="theory" class="section active">
+  <div class="sec-head">
+    <h2>📖 Теория</h2>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ti">💡</span> Негізгі ұғым</div>
+    <p class="text">
+      Жол жүрудің тиімді бағытын табу немесе қандай да бір заттардың тиімді өлшемдерін табу есептері тәжірибеде жиі кездеседі.
+      Мұндай сұрақтарға жауап табу үшін бізге <span class="hl">үшбұрыштың теңсіздігі</span> көмек бола алады.
+    </p>
+
+    <div class="theorem">
+      <p>Кез келген үшбұрышта екі қабырғасының қосындысы<br>үшінші қабырғасынан артық болады.</p>
+    </div>
+
+    <p class="text" style="margin-top:12px;">
+      Яғни, <span class="hl">AB + BC > AC</span>, <span class="hl-o">AB + AC > BC</span>, <span class="hl-g">BC + AC > AB</span>
+    </p>
+  </div>
+
+  <div class="grid3" style="margin-bottom:24px;">
+    <div class="kp">
+      <div class="emoji">📏</div>
+      <h4>3 шарт</h4>
+      <p>Үшбұрыш болу үшін 3 теңсіздіктің барлығы орындалуы керек</p>
+    </div>
+    <div class="kp">
+      <div class="emoji">🚫</div>
+      <h4>Үшбұрыш жоқ</h4>
+      <p>Егер кез келген шарт бұзылса, үшбұрыш құру мүмкін емес</p>
+    </div>
+    <div class="kp">
+      <div class="emoji">📐</div>
+      <h4>Кері де дұрыс</h4>
+      <p>3 теңсіздік орындалса, сол қабырғалармен үшбұрыш бар</p>
+    </div>
+  </div>
+
+  <div class="card accent-orange">
+    <div class="card-title"><span class="ti">📌</span> Маңызды тұжырым</div>
+    <div class="info-box orange">
+      Кез келген үшбұрыштың қабырғасы қалған екі қабырғаның айырымынан үлкен және қосындысынан кіші:
+      <br><br>
+      <strong>|AB − BC| &lt; AC &lt; AB + BC</strong>
+    </div>
+    <p class="text" style="margin-top:12px;">
+      Бұл тұжырым үшінші қабырғаның мүмкін болатын мәндер ауқымын анықтайды.
+    </p>
+  </div>
+
+  <div class="card accent-green">
+    <div class="card-title"><span class="ti">🎨</span> Графикалық түсіндірме</div>
+    <div class="grid2">
+      <div class="diagram-wrap">
+        <svg width="100%" viewBox="0 0 280 180">
+          <defs>
+            <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+            </marker>
+          </defs>
+          <!-- Valid triangle -->
+          <polygon points="140,20 40,155 240,155" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="2"/>
+          <!-- Side labels -->
+          <text x="70" y="88" font-size="13" font-weight="700" fill="#38bdf8" font-family="Outfit">a=7</text>
+          <text x="195" y="88" font-size="13" font-weight="700" fill="#f59e0b" font-family="Outfit">b=6</text>
+          <text x="128" y="172" font-size="13" font-weight="700" fill="#34d399" font-family="Outfit">c=9</text>
+          <!-- Vertices -->
+          <circle cx="140" cy="20" r="5" fill="#38bdf8"/>
+          <circle cx="40" cy="155" r="5" fill="#f59e0b"/>
+          <circle cx="240" cy="155" r="5" fill="#34d399"/>
+          <text x="135" y="14" font-size="12" font-weight="800" fill="#e2e8f0" font-family="Outfit">C</text>
+          <text x="22" y="160" font-size="12" font-weight="800" fill="#e2e8f0" font-family="Outfit">A</text>
+          <text x="245" y="160" font-size="12" font-weight="800" fill="#e2e8f0" font-family="Outfit">B</text>
+          <!-- Check marks -->
+          <text x="30" y="30" font-size="11" fill="#34d399" font-family="Outfit">✓ 7+6=13 > 9</text>
+          <text x="30" y="48" font-size="11" fill="#34d399" font-family="Outfit">✓ 7+9=16 > 6</text>
+          <text x="30" y="66" font-size="11" fill="#34d399" font-family="Outfit">✓ 6+9=15 > 7</text>
+        </svg>
+        <h4 style="color:var(--green);">✅ Үшбұрыш бар! (7, 6, 9)</h4>
+      </div>
+
+      <div class="diagram-wrap">
+        <svg width="100%" viewBox="0 0 280 180">
+          <!-- Invalid: 1, 2, 5 -->
+          <!-- Show three segments that don't connect -->
+          <line x1="30" y1="60" x2="80" y2="60" stroke="#f87171" stroke-width="3"/>
+          <text x="48" y="52" font-size="12" fill="#f87171" font-family="Outfit" font-weight="700">1</text>
+          <line x1="110" y1="60" x2="160" y2="60" stroke="#f87171" stroke-width="3"/>
+          <text x="128" y="52" font-size="12" fill="#f87171" font-family="Outfit" font-weight="700">2</text>
+          <line x1="190" y1="60" x2="240" y2="60" stroke="#f87171" stroke-width="3"/>
+          <text x="205" y="52" font-size="12" fill="#f87171" font-family="Outfit" font-weight="700">+</text>
+          <line x1="40" y1="100" x2="240" y2="100" stroke="#a78bfa" stroke-width="3"/>
+          <text x="125" y="92" font-size="12" fill="#a78bfa" font-family="Outfit" font-weight="700">5</text>
+          <text x="55" y="140" font-size="12" fill="#f87171" font-family="Outfit">✗ 1+2=3 &lt; 5</text>
+          <text x="55" y="158" font-size="12" fill="#f87171" font-family="Outfit">Жеткіліксіз!</text>
+          <text x="140" y="25" font-size="13" fill="#f87171" font-family="Outfit" font-weight="700" text-anchor="middle">Теңсіздік бұзылды!</text>
+        </svg>
+        <h4 style="color:var(--red);">❌ Үшбұрыш жоқ! (1, 2, 5)</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent-purple">
+    <div class="card-title"><span class="ti">📊</span> Мысалдар кестесі</div>
+    <table class="styled-table">
+      <thead><tr><th>a</th><th>b</th><th>c</th><th>a+b&gt;c?</th><th>a+c&gt;b?</th><th>b+c&gt;a?</th><th>Үшбұрыш?</th></tr></thead>
+      <tbody>
+        <tr><td>3</td><td>4</td><td>5</td><td class="yes">✓ 7>5</td><td class="yes">✓ 8>4</td><td class="yes">✓ 9>3</td><td class="yes">✅ Бар</td></tr>
+        <tr><td>5</td><td>12</td><td>13</td><td class="yes">✓ 17>13</td><td class="yes">✓ 18>12</td><td class="yes">✓ 25>5</td><td class="yes">✅ Бар</td></tr>
+        <tr><td>1</td><td>2</td><td>3</td><td class="no">✗ 3=3</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">❌ Жоқ</td></tr>
+        <tr><td>4</td><td>8</td><td>15</td><td class="no">✗ 12&lt;15</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">❌ Жоқ</td></tr>
+        <tr><td>7</td><td>7</td><td>7</td><td class="yes">✓ 14>7</td><td class="yes">✓ 14>7</td><td class="yes">✓ 14>7</td><td class="yes">✅ Тең жақты</td></tr>
+        <tr><td>6</td><td>6</td><td>11</td><td class="no">✗ 12&gt;11 ✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✅ Бар</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== INTERACTIVE ===== -->
+<section id="interactive" class="section">
+  <div class="sec-head"><h2>🔬 Интерактивті зерттеу</h2><div class="sec-line"></div></div>
+
+  <div class="card">
+    <div class="card-title"><span class="ti">🖱️</span> Үшбұрышты өзгерт, теңсіздікті байқа!</div>
+    <p class="text" style="margin-bottom:16px;">Нүктелерді сүйреп жылжыт. Жасыл = үшбұрыш бар, Қызыл = жоқ.</p>
+    <div class="canvas-container">
+      <canvas id="triCanvas" width="600" height="360"></canvas>
+      <div class="info-chips" id="triChips">
+        <span class="chip blue" id="chip-ab">AB = –</span>
+        <span class="chip orange" id="chip-bc">BC = –</span>
+        <span class="chip green" id="chip-ca">CA = –</span>
+        <span class="chip" id="chip-ineq1">AB+BC > CA?</span>
+        <span class="chip" id="chip-ineq2">AB+CA > BC?</span>
+        <span class="chip" id="chip-ineq3">BC+CA > AB?</span>
+        <span class="chip" id="chip-valid">?</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent-orange">
+    <div class="card-title"><span class="ti">🧵</span> Арқан эксперименті (оқулықтан)</div>
+    <p class="text" style="margin-bottom:16px;">
+      Ежелгі мысырлықтар шіркеу салу барысында бірдей қашықтықта орналасқан 13 түйіні бар жіп пайдаланған.
+      Осы жіптің көмегімен олар түйіндері үшбұрыштың төбесі болатындай етіп, үшбұрыштар құрастыра алған.
+    </p>
+    <div class="rope-viz">
+      <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:16px;">Бөліктерді өзгерт (жалпы = 13 бірлік):</p>
+      <div class="rope-slider-wrap">
+        <label><span>a қабырғасы</span><span id="val-a" style="color:var(--primary); font-weight:700;">3</span></label>
+        <input type="range" min="1" max="11" value="3" id="slider-a" oninput="updateRope()">
+      </div>
+      <div class="rope-slider-wrap">
+        <label><span>b қабырғасы</span><span id="val-b" style="color:var(--accent); font-weight:700;">4</span></label>
+        <input type="range" min="1" max="11" value="4" id="slider-b" oninput="updateRope()">
+      </div>
+      <div id="rope-result" style="margin-top:16px; padding:16px; border-radius:12px; text-align:center; background:var(--surface);">
+        <div id="rope-c" style="font-size:1rem; font-weight:700; color:var(--green);">c = 6</div>
+        <div id="rope-status" style="font-size:0.88rem; color:var(--text-muted); margin-top:6px;"></div>
+        <canvas id="ropeCanvas" width="400" height="120" style="margin-top:12px; border-radius:10px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent-green">
+    <div class="card-title"><span class="ti">📐</span> Үшінші қабырғаның ауқымы</div>
+    <p class="text" style="margin-bottom:16px;">Екі қабырғасы белгілі болғанда, үшінші қабырғаның мүмкін мәндер ауқымын тап:</p>
+    <div class="checker-grid">
+      <div class="input-group">
+        <label>a қабырғасы</label>
+        <input type="number" id="range-a" value="8" min="1">
+      </div>
+      <div class="input-group">
+        <label>b қабырғасы</label>
+        <input type="number" id="range-b" value="5" min="1">
+      </div>
+      <div style="display:flex; align-items:flex-end;">
+        <button class="check-btn" onclick="calcRange()" style="width:100%;">Есепте</button>
+      </div>
+    </div>
+    <div class="range-display" id="rangeDisplay">
+      <div class="range-line">
+        <span class="range-label">Минимум (шек):</span>
+        <span class="range-value" id="range-min">–</span>
+        <span style="color:var(--text-muted); font-size:0.85rem;">-ден үлкен</span>
+      </div>
+      <div class="range-line">
+        <span class="range-label">Максимум (шек):</span>
+        <span class="range-value" id="range-max">–</span>
+        <span style="color:var(--text-muted); font-size:0.85rem;">-ден кіші</span>
+      </div>
+      <div class="range-line" style="margin-top:8px; border-top:1px solid var(--border); padding-top:8px;">
+        <span class="range-label" style="font-weight:700; color:var(--text);">Ауқым:</span>
+        <span id="range-full" style="font-weight:700; color:var(--accent); font-size:1.05rem;"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROOF ===== -->
+<section id="proof" class="section">
+  <div class="sec-head"><h2>✏️ Теорема дәлелдемесі</h2><div class="sec-line"></div></div>
+
+  <div class="card">
+    <div class="card-title"><span class="ti">📋</span> Берілгені және дәлелдеу керек</div>
+    <div class="grid2">
+      <div>
+        <div class="info-box blue">
+          <strong>Берілгені:</strong> △ABC — үшбұрыш
+        </div>
+        <div class="info-box orange" style="margin-top:10px;">
+          <strong>Дәлелдеу керек:</strong> AC &lt; AB + BC
+        </div>
+      </div>
+      <div class="diagram-wrap">
+        <svg width="100%" viewBox="0 0 240 180">
+          <polygon points="120,15 30,155 210,155" fill="rgba(56,189,248,0.06)" stroke="#38bdf8" stroke-width="2"/>
+          <line x1="30" y1="155" x2="260" y2="100" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3"/>
+          <circle cx="30" cy="155" r="4" fill="#38bdf8"/>
+          <circle cx="120" cy="15" r="4" fill="#f59e0b"/>
+          <circle cx="210" cy="155" r="4" fill="#34d399"/>
+          <circle cx="260" cy="100" r="4" fill="#f59e0b"/>
+          <text x="10" y="162" font-size="13" font-weight="800" fill="#e2e8f0" font-family="Outfit">A</text>
+          <text x="116" y="10" font-size="13" font-weight="800" fill="#e2e8f0" font-family="Outfit">C</text>
+          <text x="213" y="162" font-size="13" font-weight="800" fill="#e2e8f0" font-family="Outfit">B</text>
+          <text x="264" y="104" font-size="13" font-weight="800" fill="#f59e0b" font-family="Outfit">D</text>
+          <!-- Tick marks -->
+          <line x1="195" y1="130" x2="208" y2="120" stroke="#34d399" stroke-width="3"/>
+          <line x1="240" y1="122" x2="248" y2="112" stroke="#34d399" stroke-width="3"/>
+          <text x="100" y="175" font-size="10" fill="#94a3b8" font-family="Outfit" text-anchor="middle">BD = BC (тең қабырға)</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent-orange">
+    <div class="card-title"><span class="ti">🔢</span> Дәлелдеме қадамдары</div>
+    <p class="text" style="margin-bottom:16px; font-style:italic;">
+      Дәлелдеме: BD = CB болатындай етіп, B кесіндісін жүргіземіз.
+    </p>
+    <div class="proof-steps">
+      <div class="proof-step">
+        <div class="step-n">1</div>
+        <div>
+          <div class="step-stmt">BD = BC</div>
+          <div class="step-why">Берілген кесіндіге тең кесінді салу аксиомасы негізінде</div>
+        </div>
+      </div>
+      <div class="proof-step">
+        <div class="step-n">2</div>
+        <div>
+          <div class="step-stmt">∠1 = ∠2</div>
+          <div class="step-why">BCD үшбұрышы теңбүйірлі болғандықтан (BD = BC)</div>
+        </div>
+      </div>
+      <div class="proof-step">
+        <div class="step-n">3</div>
+        <div>
+          <div class="step-stmt">∠BAC &lt; ∠1</div>
+          <div class="step-why">Үшбұрыштың сыртқы бұрышы оған сыбайлас емес бұрыштан үлкен</div>
+        </div>
+      </div>
+      <div class="proof-step">
+        <div class="step-n">4</div>
+        <div>
+          <div class="step-stmt">CDA &lt; ACD</div>
+          <div class="step-why">∠CDA = ∠1 + ∠BAC (сыртқы бұрыш ретінде), демек ∠CDA үлкен</div>
+        </div>
+      </div>
+      <div class="proof-step">
+        <div class="step-n">5</div>
+        <div>
+          <div class="step-stmt">∠2 &lt; ∠BCA</div>
+          <div class="step-why">∠2 бұрышы ∠BCA бұрышының бөлігі болғандықтан</div>
+        </div>
+      </div>
+      <div class="proof-step">
+        <div class="step-n">6</div>
+        <div>
+          <div class="step-stmt">∠1 &lt; ∠BCA</div>
+          <div class="step-why">∠1 = ∠2 болғандықтан (2-қадамнан)</div>
+        </div>
+      </div>
+      <div class="proof-step">
+        <div class="step-n done">✓</div>
+        <div>
+          <div class="step-stmt" style="color:var(--green);">AC &lt; AB + BC — дәлелденді!</div>
+          <div class="step-why">ACD үшбұрышында үлкен бұрышқа қарсы үлкен қабырға: AD &gt; AC, ал AD = AB + BD = AB + BC</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent-purple">
+    <div class="card-title"><span class="ti">🔄</span> Теореманың кері тұжырымы</div>
+    <div class="info-box purple">
+      <strong>Тұжырым:</strong> Үшбұрыштың кез келген қабырғасы қалған екі қабырғаның айырымынан үлкен:
+      <br><br>AB − BC &lt; AC, демек: <strong>|AB − BC| &lt; AC &lt; AB + BC</strong>
+    </div>
+    <p class="text" style="margin-top:12px;">
+      Бұл шарт үшінші қабырғаның мүмкін болатын мәндер аралығын анықтайды.
+      Егер a = 8 және b = 5 болса: <span class="hl">3 &lt; c &lt; 13</span>
+    </p>
+  </div>
+</section>
+
+<!-- ===== CHECKER ===== -->
+<section id="checker" class="section">
+  <div class="sec-head"><h2>🔍 Теңсіздік тексеруші</h2><div class="sec-line"></div></div>
+
+  <div class="card">
+    <div class="card-title"><span class="ti">✅</span> Үшбұрыш бар ма? — Тексер!</div>
+    <p class="text" style="margin-bottom:20px;">Үш қабырғаның ұзындықтарын енгіз, теңсіздіктің орындалатынын тексер:</p>
+    <div class="checker-grid">
+      <div class="input-group">
+        <label>A қабырғасы</label>
+        <input type="number" id="chk-a" value="7" min="0.1" step="0.1">
+      </div>
+      <div class="input-group">
+        <label>B қабырғасы</label>
+        <input type="number" id="chk-b" value="10" min="0.1" step="0.1">
+      </div>
+      <div class="input-group">
+        <label>C қабырғасы</label>
+        <input type="number" id="chk-c" value="8" min="0.1" step="0.1">
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="check-btn" onclick="checkTriangle()">🔍 Тексеру</button>
+    </div>
+    <div class="result-display" id="checkResult">
+      <div class="result-icon" id="resultIcon"></div>
+      <div class="result-text" id="resultText"></div>
+      <div class="result-detail" id="resultDetail"></div>
+    </div>
+  </div>
+
+  <div class="card accent-orange">
+    <div class="card-title"><span class="ti">📊</span> Оқулықтан мысалдар — Тексер!</div>
+    <table class="styled-table">
+      <thead><tr><th>Қабырғалар</th><th>Шарт 1</th><th>Шарт 2</th><th>Шарт 3</th><th>Нәтиже</th></tr></thead>
+      <tbody>
+        <tr><td><strong>15, 4, 8</strong></td><td class="no">15+4=19>8 ✓</td><td class="yes">4+8=12 &lt; 15 ✗</td><td class="yes">15+8>4 ✓</td><td class="no">❌ Жоқ</td></tr>
+        <tr><td><strong>7, 12, 8</strong></td><td class="yes">7+12>8 ✓</td><td class="yes">7+8>12 ✓</td><td class="yes">12+8>7 ✓</td><td class="yes">✅ Бар</td></tr>
+        <tr><td><strong>1, 2, 3</strong></td><td class="no">1+2=3 ✗</td><td class="yes">1+3>2 ✓</td><td class="yes">2+3>1 ✓</td><td class="no">❌ Жоқ</td></tr>
+        <tr><td><strong>5, 16, 12</strong></td><td class="no">5+12=17>16 ✓</td><td class="no">5+16>12 ✓</td><td class="yes">16+12>5 ✓</td><td class="yes">✅ Бар</td></tr>
+        <tr><td><strong>1, 2, 4</strong></td><td class="no">1+2=3 &lt; 4 ✗</td><td class="yes">–</td><td class="yes">–</td><td class="no">❌ Жоқ</td></tr>
+        <tr><td><strong>6, 7, 10</strong></td><td class="yes">6+7>10 ✓</td><td class="yes">6+10>7 ✓</td><td class="yes">7+10>6 ✓</td><td class="yes">✅ Бар</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card accent-green">
+    <div class="card-title"><span class="ti">📐</span> Үшінші қабырғаның ауқымын есепте</div>
+    <div class="checker-grid">
+      <div class="input-group">
+        <label>Бірінші қабырға (a)</label>
+        <input type="number" id="range-a" value="8" min="0.1" step="0.1">
+      </div>
+      <div class="input-group">
+        <label>Екінші қабырға (b)</label>
+        <input type="number" id="range-b" value="5" min="0.1" step="0.1">
+      </div>
+      <div style="display:flex; align-items:flex-end;">
+        <button class="check-btn" onclick="calcRange()" style="width:100%;">Есепте</button>
+      </div>
+    </div>
+    <div class="range-display" id="rangeDisplay">
+      <div class="range-line">
+        <span class="range-label">Минимум (шек):</span>
+        <span class="range-value" id="range-min">–</span>
+        <span style="color:var(--text-muted); font-size:0.85rem;">-ден үлкен (теңдік жоқ)</span>
+      </div>
+      <div class="range-line">
+        <span class="range-label">Максимум (шек):</span>
+        <span class="range-value" id="range-max">–</span>
+        <span style="color:var(--text-muted); font-size:0.85rem;">-ден кіші (теңдік жоқ)</span>
+      </div>
+      <div style="margin-top:10px; padding:12px; background:var(--accent-dim); border-radius:10px; border:1px solid rgba(245,158,11,0.3);">
+        <span style="color:var(--accent); font-weight:700; font-size:1.05rem;" id="range-full"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TASKS ===== -->
+<section id="tasks" class="section">
+  <div class="sec-head"><h2>📝 Есептер жинағы</h2><div class="sec-line"></div></div>
+
+  <!-- Task 1 -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 1</span>
+      <span class="task-title">Үшбұрыш бар ма?</span>
+    </div>
+    <div class="task-text">
+      Қабырғалардың ұзындықтары берілген. Үшбұрыш құруға болады ма?<br>
+      а) 15 см, 4 см және 8 см<br>
+      б) 7 см, 12 см және 8 см<br>
+      в) 1 см, 2 см, 3 см<br>
+      г) 9 см, 11 см, 15 см
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+    <div class="answer-box">
+      <strong>а) 15, 4, 8:</strong> 4+8=12 &lt; 15 — ❌ Үшбұрыш жоқ!<br>
+      <strong>б) 7, 12, 8:</strong> 7+12>8 ✓, 7+8=15>12 ✓, 12+8>7 ✓ — ✅ Бар!<br>
+      <strong>в) 1, 2, 3:</strong> 1+2=3, теңдік болған соң — ❌ Жоқ!<br>
+      <strong>г) 9, 11, 15:</strong> 9+11=20>15 ✓, 9+15>11 ✓, 11+15>9 ✓ — ✅ Бар!
+    </div>
+  </div>
+
+  <!-- Task 2 -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 2</span>
+      <span class="task-title">Қатынас бойынша</span>
+    </div>
+    <div class="task-text">
+      Үшбұрыштың қабырғаларының қатынастары берілген. Үшбұрыш бар ма?<br>
+      а) 1:2:3<br>
+      б) 2:2:4<br>
+      в) 2:3:6<br>
+      г) 3:4:5<br>
+      д) 5:6:9
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+    <div class="answer-box">
+      <strong>а) 1:2:3</strong> → мысалы 1,2,3: 1+2=3 ✗ — ❌ Жоқ<br>
+      <strong>б) 2:2:4</strong> → 2,2,4: 2+2=4 ✗ — ❌ Жоқ<br>
+      <strong>в) 2:3:6</strong> → 2,3,6: 2+3=5 &lt; 6 ✗ — ❌ Жоқ<br>
+      <strong>г) 3:4:5</strong> → 3,4,5: 3+4=7>5 ✓, 3+5>4 ✓, 4+5>3 ✓ — ✅ Бар! (Питагор үшбұрышы)<br>
+      <strong>д) 5:6:9</strong> → 5+6=11>9 ✓ барлық шарт ✓ — ✅ Бар!
+    </div>
+  </div>
+
+  <!-- Task 3 -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 3</span>
+      <span class="task-title">Үшінші қабырғаны тап</span>
+    </div>
+    <div class="task-text">
+      Үшбұрыштың екі қабырғасы берілген. Үшінші қабырғаның мүмкін мәндерін тап:<br>
+      а) a=8 см, b=12 см, с=?<br>
+      б) a=5 см, b=11 см, с=?<br>
+      в) a=3 см, b=3 см, с=?<br>
+      г) a=7, b=24 (натурал бүтін сан)
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+    <div class="answer-box">
+      Формула: <strong>|a−b| &lt; c &lt; a+b</strong><br><br>
+      <strong>а)</strong> |8−12|=4 &lt; c &lt; 20 → <span style="color:var(--green); font-weight:700;">4 &lt; c &lt; 20</span><br>
+      <strong>б)</strong> |5−11|=6 &lt; c &lt; 16 → <span style="color:var(--green); font-weight:700;">6 &lt; c &lt; 16</span><br>
+      <strong>в)</strong> |3−3|=0 &lt; c &lt; 6 → <span style="color:var(--green); font-weight:700;">0 &lt; c &lt; 6</span> (яғни теңбүйірлі болуы мүмкін)<br>
+      <strong>г)</strong> |7−24|=17 &lt; c &lt; 31 → натурал: c ∈ {18, 19, 20, ..., 30}
+    </div>
+  </div>
+
+  <!-- Task 4 -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 4</span>
+      <span class="task-title">Теңбүйірлі үшбұрыш</span>
+    </div>
+    <div class="task-text">
+      а) Теңбүйірлі үшбұрыштың қабырғалары 24 см және 9 см-ге тең. Берілген қабырғалардың қайсысы үшбұрыштың табаны болып табылады?<br><br>
+      б) Периметрі 12 см-ге тең, қабырғалары сантиметрдің бүтін санымен өлшенетін әртүрлі үшбұрыштар саны қанша?
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+    <div class="answer-box">
+      <strong>а)</strong> Теңбүйірлі үшбұрышта: бүйір = 24, таба = 9:<br>
+      Тексер: 24+24>9 ✓, 24+9>24 ✓ → ✅ Үшбұрыш бар, <strong>таба = 9 болуы мүмкін</strong><br>
+      Бүйір = 9, таба = 24: 9+9=18 &lt; 24 ✗ → ❌ Жоқ!<br>
+      <strong>Жауап: тек 24 см — бүйір (таба = 9 см)</strong><br><br>
+      <strong>б)</strong> P=12, a+b+c=12, a≤b≤c:<br>
+      (1,5,6): 1+5=6 ✗; (2,4,6): 2+4=6 ✗; (2,5,5): 2+5>5 ✓; <br>
+      (3,4,5): ✓; (4,4,4): ✓; (3,3,6): 3+3=6 ✗; (1,4,7): 1+4&lt;7 ✗<br>
+      <strong>Жауап: 3 үшбұрыш — (2,5,5), (3,4,5), (4,4,4)</strong>
+    </div>
+  </div>
+
+  <!-- Task 5 -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 5</span>
+      <span class="task-title">Мысырлық арқан</span>
+    </div>
+    <div class="task-text">
+      Ежелгі мысырлықтар 13 түйіні бар жіп пайдаланған. Осы жіптің көмегімен қанша түрлі үшбұрыш құра аласың? (Үшбұрыштар конгруэнттілік бойынша айырмашылықты санайды)
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+    <div class="answer-box">
+      Периметр = 13 бірлік. a+b+c=13, a≤b≤c, теңсіздіктерді тексереміз:<br>
+      (1,5,7): 1+5=6&lt;7 ✗ | (1,6,6): 1+6>6 ✓ ✅<br>
+      (2,4,7): 2+4=6&lt;7 ✗ | (2,5,6): 2+5>6 ✓ ✅<br>
+      (3,3,7): 3+3=6&lt;7 ✗ | (3,4,6): 3+4>6 ✓ ✅<br>
+      (3,5,5): 3+5>5 ✓ ✅ | (4,4,5): 4+4>5 ✓ ✅<br>
+      (1,1,11),(1,2,10)... бәрі сәтсіз<br>
+      <strong>Жауап: 5 үшбұрыш мүмкін!</strong> {1,6,6}, {2,5,6}, {3,4,6}, {3,5,5}, {4,4,5}
+    </div>
+  </div>
+
+  <!-- Task 6: Table task from textbook -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 6</span>
+      <span class="task-title">Кесте толтыр</span>
+    </div>
+    <div class="task-text">
+      Үшбұрыштың екі қабырғасы берілген. Үшінші қабырғаның мүмкін мәндерін тап:
+      <table class="styled-table" style="margin-top:12px;">
+        <thead><tr><th>a</th><th>b</th><th>c (ауқымы)</th></tr></thead>
+        <tbody>
+          <tr><td>8</td><td>12</td><td>?</td></tr>
+          <tr><td>?</td><td>2</td><td>7</td></tr>
+          <tr><td>5</td><td>?</td><td>16</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+    <div class="answer-box">
+      <strong>1-жол (a=8, b=12):</strong> |12-8|=4 &lt; c &lt; 20 → <span style="color:var(--green);">4 &lt; c &lt; 20</span><br>
+      <strong>2-жол (b=2, c=7):</strong> |a-2| &lt; 7 &lt; a+2 → a&gt;5 және a&lt;9 → <span style="color:var(--green);">5 &lt; a &lt; 9</span><br>
+      <strong>3-жол (a=5, c=16):</strong> |5-b| &lt; 16 &lt; 5+b → b&gt;11 → <span style="color:var(--green);">b &gt; 11</span>
+    </div>
+  </div>
+
+  <!-- Task 7 -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 7</span>
+      <span class="task-title">CD қабырғасының ауқымы</span>
+    </div>
+    <div class="task-text">
+      Суретте көрсетілгендей жердің бір бөлігіне A, B, C және D қазықтары қағылған.
+      Берілген бөлікте AB=28, BC=33, BD=69. CD қабырғасы қандай аралықта өзгереді?
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+    <div class="answer-box">
+      △ABD: AB=28, BD=69 → AD туралы: |69-28|=41 &lt; AD &lt; 97<br>
+      △BCD: BC=33, BD=69 → CD туралы: |69-33|=36 &lt; CD &lt; 102<br>
+      Бірақ D нүктесі белгіленген болса:<br>
+      △ABC+D конфигурациясынан: CD-ның ең қысқа шегі = |BD-BC| = 36, ұзын шегі = BD+BC = 102<br>
+      <strong>Жауап: 36 &lt; CD &lt; 102</strong>
+    </div>
+  </div>
+
+  <!-- Task 8 -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 8</span>
+      <span class="task-title">Ұзындықтар жиыны</span>
+    </div>
+    <div class="task-text">
+      Ұзындықтары 5; 3a; 5a кесінділер жиыны бар. a-ның қандай бүтін мәндерінде берілген кесінділер үшбұрыштың қабырғалары болуы мүмкін?
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+    <div class="answer-box">
+      Теңсіздіктер:<br>
+      5 + 3a > 5a → 5 > 2a → a &lt; 2.5<br>
+      5 + 5a > 3a → 5 > -2a → әрқашан (a&gt;0 болса)<br>
+      3a + 5a > 5 → 8a > 5 → a &gt; 0.625<br><br>
+      Демек: 0.625 &lt; a &lt; 2.5<br>
+      Бүтін мәндер: <strong>a = 1 немесе a = 2</strong><br>
+      a=1: (5,3,5) ✓ | a=2: (5,6,10): 5+6=11>10 ✓ ✅
+    </div>
+  </div>
+
+  <!-- Task 9: New original task -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 9</span>
+      <span class="task-title">Айырым ережесі</span>
+    </div>
+    <div class="task-text">
+      Дәлелде: Үшбұрыштың кез келген қабырғасы қалған екі қабырғаның айырымынан үлкен.
+      Яғни, △ABC-те: <strong>AB − BC &lt; AC</strong> болатынын дәлелде.
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Дәлелдемені көру</button>
+    <div class="answer-box">
+      <strong>Теңсіздіктен:</strong> AC + BC &gt; AB (үшбұрыш теңсіздігі)<br>
+      Екі жағынан BC-ны алып тастасақ: AC &gt; AB − BC<br>
+      Яғни: <strong>AB − BC &lt; AC</strong> ✓<br><br>
+      Бұл кері теорема — теңсіздік екі бағытта да жұмыс істейді!
+    </div>
+  </div>
+
+  <!-- Task 10 -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 10</span>
+      <span class="task-title">Тікбұрышты үшбұрыш</span>
+    </div>
+    <div class="task-text">
+      Тікбұрышты үшбұрыштың бір катеті 6 см, екіншісі 8 см. Гипотенузасы үшбұрыш теңсіздігін қанағаттандыра ма? Тексер.
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+    <div class="answer-box">
+      Питагор теоремасы: c² = 6² + 8² = 36 + 64 = 100 → c = 10<br><br>
+      Теңсіздіктерді тексер:<br>
+      6 + 8 = 14 &gt; 10 ✓<br>
+      6 + 10 = 16 &gt; 8 ✓<br>
+      8 + 10 = 18 &gt; 6 ✓<br><br>
+      <strong>Жауап: Иә, барлық теңсіздіктер орындалады! ✅</strong>
+    </div>
+  </div>
+
+  <!-- Task 11 -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 11</span>
+      <span class="task-title">Периметр арқылы</span>
+    </div>
+    <div class="task-text">
+      △ABC-тің периметрі 30 см. BC = 9 см. AB мен AC-тің мүмкін мәндерін тап, егер AB = AC болса (теңбүйірлі).
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+    <div class="answer-box">
+      AB = AC = x болсын.<br>
+      Периметр: x + x + 9 = 30 → 2x = 21 → x = 10.5 см<br><br>
+      Тексер: 10.5 + 10.5 = 21 &gt; 9 ✓, 10.5 + 9 = 19.5 &gt; 10.5 ✓<br>
+      <strong>Жауап: AB = AC = 10.5 см</strong>
+    </div>
+  </div>
+
+  <!-- Task 12 -->
+  <div class="task">
+    <div class="task-header">
+      <span class="task-num">ЕСЕП 12</span>
+      <span class="task-title">Шамадан тыс тексеру</span>
+    </div>
+    <div class="task-text">
+      Келесі тұжырымдар дұрыс па?<br>
+      а) Үшбұрыштың әр қабырғасы басқа екі қабырғалардың айырымынан үлкен<br>
+      б) Егер AC + CB = AB болса, онда A, B және C нүктелері бір түзудің бойында жатады<br>
+      Жауабыңды негізде.
+    </div>
+    <button class="show-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+    <div class="answer-box">
+      <strong>а) Дұрыс!</strong> Теңсіздіктен: AB + BC &gt; AC → AB − BC &lt; AC → AC &gt; |AB − BC|<br>
+      Яғни, AC кез келген айырымнан үлкен. ✓<br><br>
+      <strong>б) Дұрыс!</strong> Егер AC + CB = AB болса, C нүктесі A мен B арасындағы жерде (немесе соңында) орналасқан болады.
+      Үшбұрыш теңсіздігі AC + CB &gt; AB талап етеді, ал теңдік болған жағдайда үшбұрыш дегенерацияланып, түзуге айналады. ✓
+    </div>
+  </div>
+
+</section>
+
+<!-- ===== QUIZ ===== -->
+<section id="quiz" class="section">
+  <div class="sec-head"><h2>🏆 Тест</h2><div class="sec-line"></div></div>
+  <div id="quizWrap">
+
+    <div class="q-block" data-correct="1">
+      <div class="q-text">1. Қабырғалары 5, 8, 14 болатын үшбұрыш бар ма?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answer(this,0)">Иә, бар</button>
+        <button class="q-opt" onclick="answer(this,1)">Жоқ, 5+8=13&lt;14</button>
+        <button class="q-opt" onclick="answer(this,2)">Иә, бірақ тек өткір бұрышты</button>
+        <button class="q-opt" onclick="answer(this,3)">Теңсіздіктен анықтау мүмкін емес</button>
+      </div>
+      <div class="q-fb">5+8=13, ал 13&lt;14. Теңсіздік бұзылады, сондықтан үшбұрыш болмайды!</div>
+    </div>
+
+    <div class="q-block" data-correct="2">
+      <div class="q-text">2. Екі қабырғасы 7 және 11 болатын үшбұрыштың үшінші қабырғасы қандай аралықта?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answer(this,0)">0 &lt; c &lt; 18</button>
+        <button class="q-opt" onclick="answer(this,1)">4 ≤ c ≤ 18</button>
+        <button class="q-opt" onclick="answer(this,2)">4 &lt; c &lt; 18</button>
+        <button class="q-opt" onclick="answer(this,3)">c &gt; 4</button>
+      </div>
+      <div class="q-fb">|11-7|=4 &lt; c &lt; 11+7=18. Теңдік болмауы керек (үшбұрыш дегенерацияланады)!</div>
+    </div>
+
+    <div class="q-block" data-correct="0">
+      <div class="q-text">3. Теңбүйірлі үшбұрыштың бүйір қабырғасы 9, табаны 20. Үшбұрыш бар ма?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answer(this,0)">Жоқ: 9+9=18&lt;20</button>
+        <button class="q-opt" onclick="answer(this,1)">Иә, бар</button>
+        <button class="q-opt" onclick="answer(this,2)">Иә, бірақ тек сатылас</button>
+        <button class="q-opt" onclick="answer(this,3)">Деректер жеткіліксіз</button>
+      </div>
+      <div class="q-fb">9+9=18&lt;20, теңсіздік орындалмайды. Мұндай теңбүйірлі үшбұрыш болмайды!</div>
+    </div>
+
+    <div class="q-block" data-correct="3">
+      <div class="q-text">4. Қатынасы 1:2:3 болатын үшбұрыш бар ма?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answer(this,0)">Иә, тік бұрышты</button>
+        <button class="q-opt" onclick="answer(this,1)">Иә, доғал бұрышты</button>
+        <button class="q-opt" onclick="answer(this,2)">Иә, теңбүйірлі</button>
+        <button class="q-opt" onclick="answer(this,3)">Жоқ: 1+2=3, теңдік</button>
+      </div>
+      <div class="q-fb">1+2=3 — теңдік! Теңсіздік ТІПТІ теңдікті де қабылдамайды. Үшбұрыш жоқ.</div>
+    </div>
+
+    <div class="q-block" data-correct="1">
+      <div class="q-text">5. Периметрі 12, натурал қабырғалары бар теңбүйірлі үшбұрыш неше болуы мүмкін?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answer(this,0)">2</button>
+        <button class="q-opt" onclick="answer(this,1)">3</button>
+        <button class="q-opt" onclick="answer(this,2)">4</button>
+        <button class="q-opt" onclick="answer(this,3)">5</button>
+      </div>
+      <div class="q-fb">(2,5,5), (4,4,4), (3,4,5) — бірақ (3,4,5) теңбүйірлі емес! Теңбүйірлі: (4,4,4) және (2,5,5) — 2 бар... Барлық үшбұрыш: 3</div>
+    </div>
+
+    <div class="q-block" data-correct="2">
+      <div class="q-text">6. Үшбұрыш теңсіздігіне сәйкес: AC + CB = AB болса не болады?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answer(this,0)">Тікбұрышты үшбұрыш пайда болады</button>
+        <button class="q-opt" onclick="answer(this,1)">Теңбүйірлі үшбұрыш пайда болады</button>
+        <button class="q-opt" onclick="answer(this,2)">A, B, C нүктелері бір түзуде орналасады</button>
+        <button class="q-opt" onclick="answer(this,3)">Доғал бұрышты үшбұрыш пайда болады</button>
+      </div>
+      <div class="q-fb">Теңдік болғанда үшбұрыш «жайылып» бір түзуге айналады — бұл дегенерацияланған жағдай!</div>
+    </div>
+
+    <div class="q-block" data-correct="0">
+      <div class="q-text">7. Ұзындықтары 5, 3a, 5a кесінділер үшін a-ның бүтін мәндері қандай?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answer(this,0)">a = 1 немесе a = 2</button>
+        <button class="q-opt" onclick="answer(this,1)">a = 1 ғана</button>
+        <button class="q-opt" onclick="answer(this,2)">a = 1, 2 немесе 3</button>
+        <button class="q-opt" onclick="answer(this,3)">a = 2 ғана</button>
+      </div>
+      <div class="q-fb">5+3a&gt;5a → a&lt;2.5 және 8a&gt;5 → a&gt;0.625. Бүтін мәндер: a=1 және a=2.</div>
+    </div>
+
+    <div class="q-block" data-correct="3">
+      <div class="q-text">8. Теңсіздіктің неше шарты бар?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answer(this,0)">1</button>
+        <button class="q-opt" onclick="answer(this,1)">2</button>
+        <button class="q-opt" onclick="answer(this,2)">4</button>
+        <button class="q-opt" onclick="answer(this,3)">3</button>
+      </div>
+      <div class="q-fb">Үш қабырға бар: a+b&gt;c, a+c&gt;b, b+c&gt;a — барлығы 3 шарт!</div>
+    </div>
+
+  </div>
+  <div class="score-card" id="scoreCard">
+    <div class="score-big" id="scoreBig">0/8</div>
+    <div class="score-label" id="scoreLabel">Нәтиже</div>
+  </div>
+</section>
+
+</div><!-- main -->
+</div><!-- page -->
+
+<script>
+// ===== NAV =====
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===== ANSWERS =====
+function toggleAns(btn) {
+  const box = btn.nextElementSibling;
+  box.classList.toggle('show');
+  btn.textContent = box.classList.contains('show') ? '🙈 Жабу' : '💡 Жауапты көру';
+}
+
+// ===== INTERACTIVE CANVAS =====
+const tc = document.getElementById('triCanvas');
+const tcx = tc.getContext('2d');
+let triPts = [{x:.5,y:.12},{x:.15,y:.85},{x:.85,y:.85}];
+let dragging = -1;
+
+function resizeCanvas() {
+  const wrap = tc.parentElement;
+  const w = Math.min(600, wrap.clientWidth - 48);
+  tc.width = w; tc.height = Math.round(w * 0.6);
+  drawTri();
+}
+
+function ptDist(a, b) { return Math.hypot(a.x-b.x, a.y-b.y); }
+
+function drawTri() {
+  const W = tc.width, H = tc.height;
+  tcx.clearRect(0,0,W,H);
+
+  // grid
+  tcx.strokeStyle = 'rgba(99,179,237,0.06)';
+  tcx.lineWidth = 1;
+  for(let x=0;x<=W;x+=W/15){tcx.beginPath();tcx.moveTo(x,0);tcx.lineTo(x,H);tcx.stroke();}
+  for(let y=0;y<=H;y+=H/10){tcx.beginPath();tcx.moveTo(0,y);tcx.lineTo(W,y);tcx.stroke();}
+
+  const p = triPts.map(pt => ({x:pt.x*W, y:pt.y*H}));
+  const [A,B,C] = p;
+
+  const dAB = ptDist(triPts[0],triPts[1]);
+  const dBC = ptDist(triPts[1],triPts[2]);
+  const dCA = ptDist(triPts[2],triPts[0]);
+
+  // Scale for display
+  const scale = 200;
+  const ab = (dAB*scale).toFixed(1);
+  const bc = (dBC*scale).toFixed(1);
+  const ca = (dCA*scale).toFixed(1);
+
+  const i1 = dAB+dBC > dCA;
+  const i2 = dAB+dCA > dBC;
+  const i3 = dBC+dCA > dAB;
+  const valid = i1 && i2 && i3;
+
+  // Fill
+  tcx.beginPath();
+  tcx.moveTo(A.x,A.y); tcx.lineTo(B.x,B.y); tcx.lineTo(C.x,C.y);
+  tcx.closePath();
+  tcx.fillStyle = valid ? 'rgba(52,211,153,0.08)' : 'rgba(248,113,113,0.08)';
+  tcx.fill();
+
+  // Sides
+  const cols = ['#38bdf8','#f59e0b','#34d399'];
+  [[A,B],[B,C],[C,A]].forEach(([p1,p2],i)=>{
+    tcx.beginPath(); tcx.moveTo(p1.x,p1.y); tcx.lineTo(p2.x,p2.y);
+    tcx.strokeStyle = cols[i]; tcx.lineWidth = 2.5; tcx.stroke();
+  });
+
+  // Points
+  const pcols = ['#38bdf8','#f59e0b','#34d399'];
+  const plbls = ['A','B','C'];
+  const poffs = [{x:-22,y:-10},{x:-22,y:20},{x:10,y:20}];
+  p.forEach((pt,i)=>{
+    tcx.beginPath(); tcx.arc(pt.x,pt.y,dragging===i?11:8,0,Math.PI*2);
+    tcx.fillStyle = pcols[i]; tcx.fill();
+    tcx.strokeStyle='rgba(255,255,255,0.3)'; tcx.lineWidth=2; tcx.stroke();
+    tcx.font='bold 14px Outfit'; tcx.fillStyle='#e2e8f0';
+    tcx.fillText(plbls[i], pt.x+poffs[i].x, pt.y+poffs[i].y);
+  });
+
+  // Side labels
+  const mids = [{x:(A.x+B.x)/2,y:(A.y+B.y)/2},{x:(B.x+C.x)/2,y:(B.y+C.y)/2},{x:(C.x+A.x)/2,y:(C.y+A.y)/2}];
+  const svals = [ab, bc, ca];
+  const snames = ['AB','BC','CA'];
+  mids.forEach((m,i)=>{
+    tcx.font='bold 12px Outfit'; tcx.fillStyle=cols[i];
+    tcx.fillText(snames[i]+'='+svals[i], m.x-16, m.y+4);
+  });
+
+  // Update chips
+  document.getElementById('chip-ab').textContent = 'AB='+ab;
+  document.getElementById('chip-bc').textContent = 'BC='+bc;
+  document.getElementById('chip-ca').textContent = 'CA='+ca;
+
+  const c1 = document.getElementById('chip-ineq1');
+  const c2 = document.getElementById('chip-ineq2');
+  const c3 = document.getElementById('chip-ineq3');
+  const cv = document.getElementById('chip-valid');
+
+  c1.textContent = 'AB+BC>'+'CA: '+(i1?'✓':'✗');
+  c1.className = 'chip '+(i1?'green':'');
+  c1.style.color = i1 ? 'var(--green)' : 'var(--red)';
+  c1.style.borderColor = i1 ? 'rgba(52,211,153,0.4)' : 'rgba(248,113,113,0.4)';
+
+  c2.textContent = 'AB+CA>BC: '+(i2?'✓':'✗');
+  c2.style.color = i2 ? 'var(--green)' : 'var(--red)';
+  c2.style.borderColor = i2 ? 'rgba(52,211,153,0.4)' : 'rgba(248,113,113,0.4)';
+
+  c3.textContent = 'BC+CA>AB: '+(i3?'✓':'✗');
+  c3.style.color = i3 ? 'var(--green)' : 'var(--red)';
+  c3.style.borderColor = i3 ? 'rgba(52,211,153,0.4)' : 'rgba(248,113,113,0.4)';
+
+  cv.textContent = valid ? '✅ Үшбұрыш БАР!' : '❌ Үшбұрыш ЖОҚ!';
+  cv.style.color = valid ? 'var(--green)' : 'var(--red)';
+  cv.style.background = valid ? 'var(--green-dim)' : 'var(--red-dim)';
+  cv.style.borderColor = valid ? 'rgba(52,211,153,0.4)' : 'rgba(248,113,113,0.4)';
+}
+
+tc.addEventListener('mousedown', e => {
+  const r = tc.getBoundingClientRect();
+  const pos = {x:(e.clientX-r.left)/tc.width, y:(e.clientY-r.top)/tc.height};
+  dragging = triPts.findIndex(p=>ptDist(p,pos)<0.06);
+});
+tc.addEventListener('mousemove', e => {
+  if(dragging<0) return;
+  const r = tc.getBoundingClientRect();
+  triPts[dragging] = {x:Math.max(.03,Math.min(.97,(e.clientX-r.left)/tc.width)), y:Math.max(.03,Math.min(.97,(e.clientY-r.top)/tc.height))};
+  drawTri();
+});
+tc.addEventListener('mouseup', ()=>{ dragging=-1; });
+tc.addEventListener('touchstart', e=>{e.preventDefault(); tc.dispatchEvent(new MouseEvent('mousedown',{clientX:e.touches[0].clientX,clientY:e.touches[0].clientY}));},{passive:false});
+tc.addEventListener('touchmove', e=>{e.preventDefault(); tc.dispatchEvent(new MouseEvent('mousemove',{clientX:e.touches[0].clientX,clientY:e.touches[0].clientY}));},{passive:false});
+tc.addEventListener('touchend', ()=>dragging=-1);
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// ===== ROPE =====
+function updateRope() {
+  const a = parseInt(document.getElementById('slider-a').value);
+  const bMax = 13 - a - 1;
+  const bSlider = document.getElementById('slider-b');
+  bSlider.max = bMax;
+  if(parseInt(bSlider.value) > bMax) bSlider.value = bMax;
+  const b = parseInt(bSlider.value);
+  const c = 13 - a - b;
+
+  document.getElementById('val-a').textContent = a;
+  document.getElementById('val-b').textContent = b;
+
+  const valid = a+b>c && a+c>b && b+c>a && c>0;
+  const rc = document.getElementById('rope-c');
+  const rs = document.getElementById('rope-status');
+  rc.textContent = 'c = ' + (c>0?c:'невалидно');
+  rc.style.color = valid ? 'var(--green)' : 'var(--red)';
+  rs.textContent = valid ? '✅ Үшбұрыш бар!' : '❌ Үшбұрыш жоқ!';
+  rs.style.color = valid ? 'var(--green)' : 'var(--red)';
+  drawRope(a, b, c>0?c:0, valid);
+}
+
+function drawRope(a,b,c,valid) {
+  const cv = document.getElementById('ropeCanvas');
+  const cx = cv.getContext('2d');
+  const W=cv.width, H=cv.height;
+  cx.clearRect(0,0,W,H);
+  if(!valid||c<=0) return;
+  const total=a+b+c;
+  const scale=Math.min((W-60)/total, (H-40)/total)*1.8;
+  // Draw triangle from base
+  const bx=30, by=H-20;
+  const ex=bx+c*scale, ey=by;
+  // Find apex
+  const cosA=(c*c+b*b-a*a)/(2*c*b);
+  const sinA=Math.sqrt(1-cosA*cosA);
+  const ax2=bx+b*scale*cosA, ay2=by-b*scale*sinA;
+  cx.beginPath(); cx.moveTo(bx,by); cx.lineTo(ax2,ay2); cx.lineTo(ex,ey); cx.closePath();
+  cx.fillStyle='rgba(56,189,248,0.08)'; cx.fill();
+  cx.strokeStyle='#38bdf8'; cx.lineWidth=2; cx.stroke();
+  cx.font='bold 11px Outfit'; cx.fillStyle='#38bdf8';
+  cx.fillText('c='+c, (bx+ex)/2-10, by+14);
+  cx.fillStyle='#f59e0b';
+  cx.fillText('b='+b, (bx+ax2)/2-20, (by+ay2)/2);
+  cx.fillStyle='#34d399';
+  cx.fillText('a='+a, (ex+ax2)/2+4, (ey+ay2)/2);
+}
+
+updateRope();
+
+// ===== RANGE CALC =====
+function calcRange() {
+  const a = parseFloat(document.getElementById('range-a').value);
+  const b = parseFloat(document.getElementById('range-b').value);
+  if(!a||!b) return;
+  const mn = Math.abs(a-b);
+  const mx = a+b;
+  document.getElementById('range-min').textContent = mn.toFixed(2);
+  document.getElementById('range-max').textContent = mx.toFixed(2);
+  document.getElementById('range-full').textContent = mn.toFixed(2)+' < c < '+mx.toFixed(2);
+  document.getElementById('rangeDisplay').classList.add('show');
+}
+
+// ===== CHECKER =====
+function checkTriangle() {
+  const a = parseFloat(document.getElementById('chk-a').value);
+  const b = parseFloat(document.getElementById('chk-b').value);
+  const c = parseFloat(document.getElementById('chk-c').value);
+  const i1=a+b>c, i2=a+c>b, i3=b+c>a;
+  const valid=i1&&i2&&i3;
+  const el = document.getElementById('checkResult');
+  el.style.display='block';
+  el.className='result-display '+(valid?'valid':'invalid');
+  document.getElementById('resultIcon').textContent = valid?'✅':'❌';
+  document.getElementById('resultText').innerHTML = valid
+    ? '<span class="result-valid">Үшбұрыш БАР!</span>'
+    : '<span class="result-invalid">Үшбұрыш ЖОҚ!</span>';
+  document.getElementById('resultDetail').innerHTML =
+    (i1?'✅':'❌')+` ${a}+${b}=${a+b} ${i1?'>':'≤'} ${c}<br>`+
+    (i2?'✅':'❌')+` ${a}+${c}=${a+c} ${i2?'>':'≤'} ${b}<br>`+
+    (i3?'✅':'❌')+` ${b}+${c}=${b+c} ${i3?'>':'≤'} ${a}`;
+}
+
+// ===== QUIZ =====
+let qScore=0, qAnswered=0;
+const qTotal = document.querySelectorAll('.q-block').length;
+
+function answer(btn, idx) {
+  const qb = btn.closest('.q-block');
+  if(qb.querySelector('.correct-opt')) return;
+  const correct = parseInt(qb.dataset.correct);
+  qb.querySelectorAll('.q-opt').forEach(b=>b.disabled=true);
+  qb.querySelectorAll('.q-opt')[correct].classList.add('correct-opt');
+  const fb = qb.querySelector('.q-fb');
+  fb.classList.add('show');
+  if(idx===correct) { btn.classList.add('correct-opt'); qb.classList.add('correct'); qScore++; }
+  else { btn.classList.add('wrong-opt'); qb.classList.add('wrong'); }
+  qAnswered++;
+  if(qAnswered===qTotal) {
+    const sc = document.getElementById('scoreCard');
+    sc.classList.add('show');
+    document.getElementById('scoreBig').textContent = qScore+'/'+qTotal;
+    const pct = qScore/qTotal;
+    let msg = pct===1?'🎉 Тамаша! Барлығы дұрыс!':pct>=0.75?'👏 Жақсы нәтиже!':pct>=0.5?'📚 Теорияны қайталап шық!':'💪 Тырыс, оқы!';
+    document.getElementById('scoreLabel').textContent = msg;
+  }
+}
+</script>
+</body>
+</html>
