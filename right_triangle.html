@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3.12–3.13 Тікбұрышты үшбұрыш</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf8f5;
+  --surface: #ffffff;
+  --surface2: #f0ede8;
+  --border: #e5e0d8;
+  --text: #1a1714;
+  --text-2: #4a4540;
+  --text-3: #8c847a;
+  --teal: #0d7377;
+  --teal-light: #e0f2f1;
+  --teal-mid: rgba(13,115,119,0.12);
+  --amber: #c47a1b;
+  --amber-light: #fef3e2;
+  --amber-mid: rgba(196,122,27,0.12);
+  --rose: #b5384a;
+  --rose-light: #fce8eb;
+  --rose-mid: rgba(181,56,74,0.12);
+  --indigo: #3b4f9e;
+  --indigo-light: #eef0fb;
+  --indigo-mid: rgba(59,79,158,0.12);
+  --green: #2d7a4f;
+  --green-light: #e8f5ee;
+  --green-mid: rgba(45,122,79,0.12);
+  --shadow-sm: 0 1px 3px rgba(26,23,20,0.08), 0 1px 2px rgba(26,23,20,0.04);
+  --shadow: 0 4px 16px rgba(26,23,20,0.08), 0 2px 6px rgba(26,23,20,0.04);
+  --shadow-lg: 0 12px 40px rgba(26,23,20,0.12), 0 4px 12px rgba(26,23,20,0.06);
+  --radius: 18px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ============ HERO ============ */
+.hero {
+  background: linear-gradient(135deg, #0a4f52 0%, #0d7377 40%, #1a9e8e 70%, #0d7377 100%);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 600px at 80% 50%, rgba(255,255,255,0.05) 0%, transparent 70%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+/* Animated geometric shapes */
+.hero-geo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.hero-geo svg {
+  position: absolute;
+  opacity: 0.06;
+}
+.hero-geo .g1 { top: -30px; right: 60px; animation: rotateSlow 40s linear infinite; }
+.hero-geo .g2 { bottom: -40px; left: 100px; animation: rotateSlow 30s linear infinite reverse; }
+.hero-geo .g3 { top: 40%; right: 20%; animation: rotateSlow 50s linear infinite; }
+
+@keyframes rotateSlow { to { transform: rotate(360deg); } }
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 48px 32px 40px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+}
+.hero-left {}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.hero-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+.hero-title em {
+  font-style: italic;
+  color: #a8e6e4;
+}
+.hero-desc {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: 28px;
+}
+.hero-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-pill {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 50px;
+  padding: 7px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+}
+
+/* Hero SVG diagram */
+.hero-diagram {
+  flex-shrink: 0;
+}
+
+/* ============ NAV ============ */
+.nav-wrap {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: var(--shadow-sm);
+}
+.nav-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-tab {
+  padding: 15px 20px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-3);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.nav-tab:hover { color: var(--teal); }
+.nav-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+/* ============ LAYOUT ============ */
+.main { max-width: 1160px; margin: 0 auto; padding: 44px 24px 80px; }
+.section { display: none; }
+.section.active { display: block; animation: sectionIn 0.3s ease; }
+@keyframes sectionIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* ============ SECTION HEADER ============ */
+.sec-title {
+  font-family: 'Fraunces', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.sec-sub { font-size: 0.97rem; color: var(--text-3); margin-bottom: 32px; }
+
+/* ============ CARDS ============ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.card-accent-teal { border-top: 3px solid var(--teal); }
+.card-accent-amber { border-top: 3px solid var(--amber); }
+.card-accent-rose { border-top: 3px solid var(--rose); }
+.card-accent-indigo { border-top: 3px solid var(--indigo); }
+.card-accent-green { border-top: 3px solid var(--green); }
+
+.card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-title .badge {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 50px;
+}
+.badge-teal { background: var(--teal-light); color: var(--teal); }
+.badge-amber { background: var(--amber-light); color: var(--amber); }
+.badge-rose { background: var(--rose-light); color: var(--rose); }
+.badge-indigo { background: var(--indigo-light); color: var(--indigo); }
+.badge-green { background: var(--green-light); color: var(--green); }
+
+/* ============ DEFINITION BOX ============ */
+.def-box {
+  background: var(--teal-light);
+  border: 1px solid rgba(13,115,119,0.2);
+  border-left: 4px solid var(--teal);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin: 16px 0;
+}
+.def-box p { font-size: 0.97rem; line-height: 1.8; color: var(--text-2); }
+.def-box strong { color: var(--teal); }
+
+.theorem-box {
+  background: linear-gradient(135deg, var(--teal-light), rgba(255,255,255,0.9));
+  border: 1.5px solid rgba(13,115,119,0.25);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin: 16px 0;
+  position: relative;
+}
+.theorem-box::before {
+  content: 'ТЕОРЕМА';
+  position: absolute; top: -10px; left: 16px;
+  background: var(--teal); color: #fff;
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 2px;
+  padding: 3px 10px; border-radius: 50px;
+}
+.theorem-box p {
+  font-size: 1rem; font-weight: 600; color: var(--teal);
+  line-height: 1.7; text-align: center;
+}
+
+.property-box {
+  background: var(--amber-light);
+  border: 1px solid rgba(196,122,27,0.2);
+  border-left: 4px solid var(--amber);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  font-size: 0.95rem; line-height: 1.7; color: var(--text-2);
+}
+.property-box strong { color: var(--amber); }
+
+/* ============ BODY TEXT ============ */
+.body-text { font-size: 0.97rem; line-height: 1.8; color: var(--text-2); }
+.hl { color: var(--teal); font-weight: 700; }
+.hl-a { color: var(--amber); font-weight: 700; }
+.hl-r { color: var(--rose); font-weight: 700; }
+.hl-i { color: var(--indigo); font-weight: 700; }
+
+/* ============ GRID ============ */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+
+/* ============ SIGN CARDS ============ */
+.sign-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.sign-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.sign-title { font-weight: 800; font-size: 0.9rem; color: var(--teal); margin-bottom: 8px; }
+.sign-desc { font-size: 0.85rem; color: var(--text-2); line-height: 1.6; }
+
+/* ============ SVG DIAGRAMS ============ */
+.diagram-wrap {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.diagram-wrap h4 {
+  font-size: 0.85rem; font-weight: 600; color: var(--text-3);
+  text-align: center;
+}
+
+/* ============ INTERACTIVE CANVAS ============ */
+.canvas-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+canvas { border-radius: 10px; display: block; }
+.canvas-label {
+  font-size: 0.88rem; font-weight: 600; color: var(--text-3);
+  text-align: center; margin-top: 10px;
+}
+
+/* ============ CHIP ROW ============ */
+.chip-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0; }
+.chip {
+  padding: 7px 16px; border-radius: 50px;
+  font-size: 0.85rem; font-weight: 700;
+  border: 1.5px solid;
+}
+.chip-teal { background: var(--teal-light); border-color: rgba(13,115,119,0.3); color: var(--teal); }
+.chip-amber { background: var(--amber-light); border-color: rgba(196,122,27,0.3); color: var(--amber); }
+.chip-rose { background: var(--rose-light); border-color: rgba(181,56,74,0.3); color: var(--rose); }
+.chip-indigo { background: var(--indigo-light); border-color: rgba(59,79,158,0.3); color: var(--indigo); }
+.chip-green { background: var(--green-light); border-color: rgba(45,122,79,0.3); color: var(--green); }
+.chip-result { border-width: 2px; font-size: 0.9rem; padding: 8px 20px; }
+.chip-ok { background: var(--green-light); border-color: var(--green); color: var(--green); }
+.chip-fail { background: var(--rose-light); border-color: var(--rose); color: var(--rose); }
+
+/* ============ CONTROLS ============ */
+.ctrl-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; margin: 16px 0; }
+.ctrl-group { display: flex; flex-direction: column; gap: 6px; }
+.ctrl-group label { font-size: 0.8rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; }
+.ctrl-group input[type=number], .ctrl-group select {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+  min-width: 100px;
+  transition: border-color 0.2s;
+}
+.ctrl-group input:focus, .ctrl-group select:focus { border-color: var(--teal); }
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%; height: 6px;
+  border-radius: 3px;
+  background: var(--surface2);
+  outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--teal);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(13,115,119,0.3);
+}
+
+/* ============ BUTTONS ============ */
+.btn {
+  padding: 11px 24px; border-radius: 10px; border: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700; font-size: 0.92rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-primary {
+  background: var(--teal); color: #fff;
+  box-shadow: 0 4px 14px rgba(13,115,119,0.25);
+}
+.btn-primary:hover { background: #0a5f63; transform: translateY(-1px); }
+.btn-secondary {
+  background: var(--surface2); color: var(--text-2);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
+.btn-amber {
+  background: var(--amber); color: #fff;
+  box-shadow: 0 4px 14px rgba(196,122,27,0.25);
+}
+.btn-amber:hover { background: #a96415; transform: translateY(-1px); }
+
+/* ============ RESULT PANEL ============ */
+.result-panel {
+  display: none;
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-top: 16px;
+  animation: slideUp 0.3s ease;
+}
+.result-panel.show { display: block; }
+@keyframes slideUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.result-panel.success { background: var(--green-light); border: 1px solid rgba(45,122,79,0.25); }
+.result-panel.error { background: var(--rose-light); border: 1px solid rgba(181,56,74,0.25); }
+.result-panel.info { background: var(--teal-light); border: 1px solid rgba(13,115,119,0.25); }
+.result-title { font-weight: 800; font-size: 1rem; margin-bottom: 6px; }
+.result-panel.success .result-title { color: var(--green); }
+.result-panel.error .result-title { color: var(--rose); }
+.result-panel.info .result-title { color: var(--teal); }
+.result-body { font-size: 0.9rem; color: var(--text-2); line-height: 1.7; }
+
+/* ============ PROOF STEPS ============ */
+.proof-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  border-radius: 12px; overflow: hidden; margin: 14px 0;
+}
+.proof-table th {
+  background: var(--teal); color: #fff;
+  padding: 11px 16px; font-size: 0.85rem; font-weight: 700;
+}
+.proof-table td {
+  padding: 11px 16px; border-bottom: 1px solid var(--border);
+  font-size: 0.9rem; color: var(--text-2); vertical-align: top;
+}
+.proof-table tr:last-child td { border-bottom: none; }
+.proof-table tr:nth-child(odd) td { background: var(--surface2); }
+.proof-table .step-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--teal-light); color: var(--teal);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.85rem;
+}
+.proof-table .stmt { font-weight: 700; color: var(--text); }
+.proof-table .reason { color: var(--text-3); font-style: italic; font-size: 0.85rem; margin-top: 2px; }
+
+/* ============ TASKS ============ */
+.task-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s;
+}
+.task-card:hover { box-shadow: var(--shadow); }
+.task-header {
+  padding: 16px 22px;
+  display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.task-header.teal { background: var(--teal-light); }
+.task-header.amber { background: var(--amber-light); }
+.task-header.rose { background: var(--rose-light); }
+.task-header.indigo { background: var(--indigo-light); }
+.task-num {
+  font-size: 0.75rem; font-weight: 800; letter-spacing: 1px;
+  text-transform: uppercase; padding: 4px 12px; border-radius: 50px;
+}
+.task-num.teal { background: var(--teal); color: #fff; }
+.task-num.amber { background: var(--amber); color: #fff; }
+.task-num.rose { background: var(--rose); color: #fff; }
+.task-num.indigo { background: var(--indigo); color: #fff; }
+.task-title-text { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+.task-body { padding: 20px 22px; }
+.task-text { font-size: 0.95rem; color: var(--text-2); line-height: 1.75; margin-bottom: 14px; }
+.show-ans-btn {
+  background: none; border: 1.5px solid var(--border);
+  border-radius: 8px; padding: 8px 18px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem; font-weight: 700;
+  color: var(--text-3); cursor: pointer;
+  transition: all 0.2s;
+}
+.show-ans-btn:hover { border-color: var(--teal); color: var(--teal); }
+.ans-box {
+  display: none; margin-top: 14px;
+  background: var(--green-light);
+  border: 1px solid rgba(45,122,79,0.2);
+  border-radius: 10px; padding: 14px 18px;
+  font-size: 0.9rem; color: var(--text-2); line-height: 1.8;
+}
+.ans-box.show { display: block; }
+.ans-box strong { color: var(--green); }
+
+/* ============ QUIZ ============ */
+.quiz-q {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 18px;
+  transition: border-color 0.3s;
+}
+.quiz-q.correct { border-color: var(--green); }
+.quiz-q.wrong { border-color: var(--rose); }
+.q-text { font-weight: 700; font-size: 1rem; color: var(--text); margin-bottom: 14px; line-height: 1.6; }
+.q-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.q-opt {
+  background: var(--surface2); border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 11px 14px;
+  text-align: left; cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem; font-weight: 500; color: var(--text-2);
+  transition: all 0.18s;
+}
+.q-opt:hover:not([disabled]) { border-color: var(--teal); color: var(--teal); background: var(--teal-light); }
+.q-opt.correct-opt { background: var(--green-light); border-color: var(--green); color: var(--green); font-weight: 700; }
+.q-opt.wrong-opt { background: var(--rose-light); border-color: var(--rose); color: var(--rose); font-weight: 700; }
+.q-feedback {
+  display: none; margin-top: 10px; padding: 10px 14px;
+  background: var(--surface2); border-radius: 8px;
+  font-size: 0.85rem; color: var(--text-3); line-height: 1.6;
+}
+.q-feedback.show { display: block; }
+.score-result {
+  display: none; text-align: center; padding: 40px 24px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); margin-top: 24px; box-shadow: var(--shadow);
+}
+.score-result.show { display: block; }
+.score-big {
+  font-family: 'Fraunces', serif;
+  font-size: 5rem; font-weight: 900;
+  background: linear-gradient(135deg, var(--teal), var(--amber));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.score-msg { font-size: 1.1rem; color: var(--text-2); margin-top: 8px; }
+
+/* ============ RESEARCH ============ */
+.research-card {
+  background: linear-gradient(135deg, #f0faf9, var(--surface));
+  border: 1.5px solid rgba(13,115,119,0.2);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+.research-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.4rem; font-weight: 700; color: var(--teal);
+  margin-bottom: 6px;
+}
+.research-subtitle { font-size: 0.9rem; color: var(--text-3); margin-bottom: 20px; }
+.step-num-circle {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--teal); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.85rem; flex-shrink: 0;
+}
+
+/* ============ INFO TABLE ============ */
+.info-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  border-radius: 14px; overflow: hidden; margin: 14px 0;
+}
+.info-table th {
+  background: var(--teal); color: #fff;
+  padding: 12px 16px; font-size: 0.85rem; font-weight: 700;
+  text-align: center;
+}
+.info-table td {
+  padding: 11px 16px; border-bottom: 1px solid var(--border);
+  font-size: 0.92rem; text-align: center; color: var(--text-2);
+}
+.info-table tr:last-child td { border-bottom: none; }
+.info-table tr:nth-child(odd) td { background: var(--surface2); }
+.info-table .highlight { color: var(--teal); font-weight: 700; }
+
+/* ============ SLIDER DEMO ============ */
+.slider-label {
+  display: flex; justify-content: space-between;
+  font-size: 0.82rem; font-weight: 600; color: var(--text-3);
+  margin-bottom: 6px;
+}
+.slider-val { color: var(--teal); font-weight: 800; font-size: 0.95rem; }
+
+/* ============ MEDIA ============ */
+@media (max-width: 700px) {
+  .grid2, .grid3, .q-opts { grid-template-columns: 1fr; }
+  .hero-content { grid-template-columns: 1fr; }
+  .hero-diagram { display: none; }
+  .main { padding: 24px 16px 60px; }
+  .hero-title { font-size: 1.8rem; }
+  .ctrl-row { flex-direction: column; }
+}
+
+/* number step flow */
+.step-flow { display: flex; flex-direction: column; gap: 12px; }
+.step-item { display: flex; gap: 14px; align-items: flex-start; }
+.step-content { font-size: 0.93rem; color: var(--text-2); line-height: 1.7; padding-top: 6px; }
+.step-content strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- ====== HERO ====== -->
+<div class="hero">
+  <div class="hero-geo">
+    <svg class="g1" width="220" height="220" viewBox="0 0 220 220" fill="none">
+      <polygon points="110,10 210,200 10,200" stroke="white" stroke-width="2" fill="none"/>
+      <line x1="110" y1="200" x2="110" y2="10" stroke="white" stroke-width="1.5"/>
+      <rect x="104" y="194" width="12" height="12" fill="none" stroke="white" stroke-width="2"/>
+    </svg>
+    <svg class="g2" width="180" height="180" viewBox="0 0 180 180" fill="none">
+      <polygon points="0,180 180,180 0,0" stroke="white" stroke-width="2" fill="none"/>
+      <rect x="0" y="168" width="12" height="12" fill="none" stroke="white" stroke-width="2"/>
+    </svg>
+    <svg class="g3" width="120" height="120" viewBox="0 0 120 120" fill="none">
+      <polygon points="60,5 115,95 5,95" stroke="white" stroke-width="1.5" fill="none"/>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-tag">📐 Геометрия · 7-сынып</div>
+      <h1 class="hero-title">Тікбұрышты үшбұрыш<br><em>— теориясы мен қасиеттері</em></h1>
+      <p class="hero-desc">3.12 Тікбұрышты үшбұрыштардың теңдік белгілері · 3.13 Тікбұрышты үшбұрыштың қасиеттері. Интерактивті зерттеу, дәлелдемелер, есептер.</p>
+      <div class="hero-pills">
+        <span class="hero-pill">📖 Теория</span>
+        <span class="hero-pill">🔬 Зерттеу</span>
+        <span class="hero-pill">✏️ Теңдік белгілері</span>
+        <span class="hero-pill">⚡ Қасиеттер</span>
+        <span class="hero-pill">📝 Есептер</span>
+        <span class="hero-pill">🏆 Тест</span>
+      </div>
+    </div>
+    <div class="hero-diagram">
+      <svg width="200" height="190" viewBox="0 0 200 190" fill="none">
+        <polygon points="20,170 20,30 170,170" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"/>
+        <rect x="20" y="158" width="14" height="14" fill="none" stroke="rgba(168,230,228,0.9)" stroke-width="2.5"/>
+        <!-- labels -->
+        <text x="7" y="22" fill="rgba(255,255,255,0.9)" font-family="Fraunces,serif" font-size="15" font-weight="700">A</text>
+        <text x="7" y="185" fill="rgba(255,255,255,0.9)" font-family="Fraunces,serif" font-size="15" font-weight="700">B</text>
+        <text x="173" y="185" fill="rgba(255,255,255,0.9)" font-family="Fraunces,serif" font-size="15" font-weight="700">C</text>
+        <!-- side labels -->
+        <text x="4" y="105" fill="rgba(168,230,228,0.9)" font-family="Plus Jakarta Sans,sans-serif" font-size="12" font-weight="600">катет</text>
+        <text x="90" y="188" fill="rgba(168,230,228,0.9)" font-family="Plus Jakarta Sans,sans-serif" font-size="12" font-weight="600">катет</text>
+        <text x="92" y="95" fill="rgba(253,230,138,0.9)" font-family="Plus Jakarta Sans,sans-serif" font-size="12" font-weight="600" transform="rotate(-48,92,95)">гипотенуза</text>
+        <!-- right angle mark -->
+        <path d="M20,158 L32,158 L32,170" fill="none" stroke="rgba(168,230,228,0.9)" stroke-width="2"/>
+        <!-- 30 degree arc -->
+        <path d="M30,170 A20,20 0 0,0 20,148" fill="none" stroke="rgba(253,230,138,0.7)" stroke-width="1.5"/>
+        <text x="38" y="158" fill="rgba(253,230,138,0.9)" font-size="10" font-family="Plus Jakarta Sans,sans-serif">α</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ====== NAV ====== -->
+<div class="nav-wrap">
+  <div class="nav-inner">
+    <button class="nav-tab active" onclick="showTab('theory',this)">📖 Теория</button>
+    <button class="nav-tab" onclick="showTab('signs',this)">🔎 Теңдік белгілері</button>
+    <button class="nav-tab" onclick="showTab('properties',this)">⚡ Қасиеттер</button>
+    <button class="nav-tab" onclick="showTab('research',this)">🔬 Зерттеу</button>
+    <button class="nav-tab" onclick="showTab('interactive',this)">🖥️ Интерактив</button>
+    <button class="nav-tab" onclick="showTab('tasks',this)">📝 Есептер</button>
+    <button class="nav-tab" onclick="showTab('quiz',this)">🏆 Тест</button>
+  </div>
+</div>
+
+<!-- ====== MAIN ====== -->
+<div class="main">
+
+<!-- ========= THEORY ========= -->
+<section id="theory" class="section active">
+  <div class="sec-title">📖 Тікбұрышты үшбұрыш — Анықтама</div>
+  <p class="sec-sub">3.12 тақырыптың негізгі ұғымдары мен анықтамалары</p>
+
+  <div class="card card-accent-teal">
+    <div class="card-title">Тікбұрышты үшбұрыш дегеніміз не? <span class="badge badge-teal">Анықтама</span></div>
+    <div class="def-box">
+      <p>Үшбұрыштың бұрыштарының бірі тік, ал басқа екі бұрыштарының қосындысы <strong>90°-қа тең</strong> болса, ондаоны <strong>тікбұрышты үшбұрыш</strong> деп атаймыз.</p>
+    </div>
+    <div class="grid2" style="margin-top:18px;">
+      <div class="diagram-wrap">
+        <svg width="220" height="180" viewBox="0 0 220 180">
+          <polygon points="30,150 30,20 190,150" fill="rgba(13,115,119,0.06)" stroke="#0d7377" stroke-width="2.5"/>
+          <rect x="30" y="138" width="14" height="14" fill="none" stroke="#0d7377" stroke-width="2.5"/>
+          <!-- Labels -->
+          <text x="14" y="16" font-size="14" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">A</text>
+          <text x="14" y="168" font-size="14" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">B</text>
+          <text x="193" y="168" font-size="14" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">C</text>
+          <!-- Side labels -->
+          <text x="8" y="88" font-size="12" fill="#0d7377" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">катет AB</text>
+          <text x="95" y="170" font-size="12" fill="#0d7377" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">катет BC</text>
+          <text x="110" y="80" font-size="12" fill="#c47a1b" font-weight="700" font-family="Plus Jakarta Sans,sans-serif" transform="rotate(-40,115,80)">гипотенуза AC</text>
+          <!-- Right angle indicator -->
+          <path d="M30,138 L44,138 L44,152" fill="none" stroke="#0d7377" stroke-width="2"/>
+          <!-- Angles -->
+          <path d="M40,150 A16,16 0 0,0 30,132" fill="none" stroke="#b5384a" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="46" y="140" font-size="11" fill="#b5384a" font-family="Plus Jakarta Sans,sans-serif" font-weight="600">α</text>
+          <path d="M174,150 A20,20 0 0,1 190,130" fill="none" stroke="#3b4f9e" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="167" y="138" font-size="11" fill="#3b4f9e" font-family="Plus Jakarta Sans,sans-serif" font-weight="600">β</text>
+        </svg>
+        <h4>∠B = 90°, α + β = 90°</h4>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="property-box"><strong>Гипотенуза</strong> — тік бұрышқа қарсы жатқан қабырға (ең ұзын!). Мысалы: AC</div>
+        <div class="property-box" style="background:var(--teal-light);border-left-color:var(--teal);"><strong style="color:var(--teal);">Катет</strong> — тік бұрышқа жанасатын екі қабырға. Мысалы: AB және BC</div>
+        <div class="property-box" style="background:var(--rose-light);border-left-color:var(--rose);"><strong style="color:var(--rose);">Сүйір бұрыштар</strong> — тік бұрышқа жанасатын бұрыштар (α және β). Олардың қосындысы: <strong style="color:var(--rose);">α + β = 90°</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-amber">
+    <div class="card-title">🔑 Негізгі байланыстар <span class="badge badge-amber">Формула</span></div>
+    <div class="grid3">
+      <div class="def-box" style="text-align:center;">
+        <p><strong>∠A + ∠B + ∠C = 180°</strong><br><span style="font-size:0.85rem;color:var(--text-3);">Үшбұрыш бұрыштарының қасиеті</span></p>
+      </div>
+      <div class="def-box" style="text-align:center;">
+        <p><strong>∠B = 90°</strong><br><span style="font-size:0.85rem;color:var(--text-3);">Тік бұрыш</span></p>
+      </div>
+      <div class="def-box" style="text-align:center;">
+        <p><strong>α + β = 90°</strong><br><span style="font-size:0.85rem;color:var(--text-3);">Сүйір бұрыштар</span></p>
+      </div>
+    </div>
+    <div class="theorem-box" style="margin-top:16px;">
+      <p>Тікбұрышты үшбұрышта гипотенуза — ең ұзын қабырға.<br>Гипотенуза > кез келген катет</p>
+    </div>
+  </div>
+
+  <div class="card card-accent-indigo">
+    <div class="card-title">📊 Питагор теоремасы <span class="badge badge-indigo">Байланыс</span></div>
+    <p class="body-text" style="margin-bottom:14px;">Тікбұрышты үшбұрышта катеттер мен гипотенуза арасындағы байланыс:</p>
+    <div class="theorem-box">
+      <p>a² + b² = c²<br><span style="font-size:0.85rem;color:var(--text-3);">мұнда c — гипотенуза, a және b — катеттер</span></p>
+    </div>
+    <div class="grid3" style="margin-top:16px;">
+      <div class="sign-card">
+        <div class="sign-title">Мысал 1</div>
+        <div class="sign-desc">a=3, b=4, c=5<br>3²+4²=9+16=25=5² ✓</div>
+      </div>
+      <div class="sign-card">
+        <div class="sign-title">Мысал 2</div>
+        <div class="sign-desc">a=5, b=12, c=13<br>25+144=169=13² ✓</div>
+      </div>
+      <div class="sign-card">
+        <div class="sign-title">Мысал 3</div>
+        <div class="sign-desc">a=8, b=15, c=17<br>64+225=289=17² ✓</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========= SIGNS ========= -->
+<section id="signs" class="section">
+  <div class="sec-title">🔎 Тікбұрышты үшбұрыштардың теңдік белгілері</div>
+  <p class="sec-sub">3.12 — Теңбүйірлі үшбұрыштардан өзгеше арнайы белгілер</p>
+
+  <div class="card card-accent-teal">
+    <div class="card-title">Неге арнайы белгілер керек? <span class="badge badge-teal">Кіріспе</span></div>
+    <p class="body-text">Тікбұрышты үшбұрыштар үшін үшбұрыштар теңдігінің барлық белгілері орынды. Сонымен бірге, тікбұрышты үшбұрыштарға тән <span class="hl">5 арнайы теңдік белгісі</span> бар.</p>
+  </div>
+
+  <!-- Sign 1: Hypotenuse + leg -->
+  <div class="card card-accent-teal">
+    <div class="card-title">1️⃣ Гипотенуза және катет бойынша</div>
+    <div class="grid2">
+      <div>
+        <div class="def-box">
+          <p>Егер бір тікбұрышты үшбұрыштың <strong>гипотенузасы мен катеті</strong> сәйкесінше басқа тікбұрышты үшбұрыштың гипотенузасы мен катетіне тең болса, онда мұндай үшбұрыштар <strong>тең болады</strong>.</p>
+        </div>
+        <div class="property-box">
+          <strong>Берілгені:</strong> △ABC (∠B=90°), △A₁B₁C₁ (∠B₁=90°)<br>
+          AC = A₁C₁, AB = A₁B₁<br>
+          <strong>Дәлелдеу керек:</strong> △ABC = △A₁B₁C₁
+        </div>
+      </div>
+      <div class="diagram-wrap">
+        <svg width="100%" viewBox="0 0 280 160">
+          <!-- Triangle 1 -->
+          <polygon points="20,140 20,20 130,140" fill="rgba(13,115,119,0.06)" stroke="#0d7377" stroke-width="2"/>
+          <rect x="20" y="128" width="12" height="12" fill="none" stroke="#0d7377" stroke-width="2"/>
+          <text x="6" y="16" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">A</text>
+          <text x="6" y="155" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">B</text>
+          <text x="132" y="155" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">C</text>
+          <!-- tick marks -->
+          <line x1="12" y1="78" x2="28" y2="82" stroke="#0d7377" stroke-width="2.5"/>
+          <line x1="12" y1="72" x2="28" y2="76" stroke="#0d7377" stroke-width="2.5"/>
+          <line x1="60" y1="58" x2="68" y2="70" stroke="#c47a1b" stroke-width="2.5"/>
+          <!-- Triangle 2 -->
+          <polygon points="155,140 155,20 265,140" fill="rgba(13,115,119,0.06)" stroke="#0d7377" stroke-width="2"/>
+          <rect x="155" y="128" width="12" height="12" fill="none" stroke="#0d7377" stroke-width="2"/>
+          <text x="141" y="16" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">A₁</text>
+          <text x="141" y="155" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">B₁</text>
+          <text x="268" y="155" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">C₁</text>
+          <!-- tick marks -->
+          <line x1="147" y1="78" x2="163" y2="82" stroke="#0d7377" stroke-width="2.5"/>
+          <line x1="147" y1="72" x2="163" y2="76" stroke="#0d7377" stroke-width="2.5"/>
+          <line x1="195" y1="58" x2="203" y2="70" stroke="#c47a1b" stroke-width="2.5"/>
+          <!-- equal symbol -->
+          <text x="132" y="75" font-size="18" font-weight="900" fill="#2d7a4f" font-family="Fraunces,serif">=</text>
+        </svg>
+        <h4>AB = A₁B₁ (катет) және AC = A₁C₁ (гипотенуза)</h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign 2: Two legs -->
+  <div class="card card-accent-amber">
+    <div class="card-title">2️⃣ Екі катет бойынша</div>
+    <div class="grid2">
+      <div>
+        <div class="def-box" style="background:var(--amber-light);border-left-color:var(--amber);">
+          <p>Егер бір тікбұрышты үшбұрыштың <strong>катеттері</strong> сәйкесінше басқа тікбұрышты үшбұрыштың <strong>катеттеріне тең</strong> болса, онда мұндай үшбұрыштар тең болады.</p>
+        </div>
+        <div class="property-box">
+          <strong>Себебі:</strong> Питагор теоремасынан гипотенузаны есептеп, үш қабырғасы тең үшбұрыштардың теңдігін дәлелдеуге болады.
+        </div>
+      </div>
+      <div class="diagram-wrap">
+        <svg width="100%" viewBox="0 0 280 160">
+          <polygon points="20,140 20,30 120,140" fill="rgba(196,122,27,0.06)" stroke="#c47a1b" stroke-width="2"/>
+          <rect x="20" y="128" width="12" height="12" fill="none" stroke="#c47a1b" stroke-width="2"/>
+          <line x1="12" y1="85" x2="28" y2="85" stroke="#c47a1b" stroke-width="2.5"/>
+          <line x1="63" y1="132" x2="63" y2="148" stroke="#3b4f9e" stroke-width="2.5"/>
+          <text x="6" y="26" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">A</text>
+          <text x="6" y="155" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">B</text>
+          <text x="122" y="155" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">C</text>
+          <!-- Triangle 2 -->
+          <polygon points="155,140 155,30 255,140" fill="rgba(196,122,27,0.06)" stroke="#c47a1b" stroke-width="2"/>
+          <rect x="155" y="128" width="12" height="12" fill="none" stroke="#c47a1b" stroke-width="2"/>
+          <line x1="147" y1="85" x2="163" y2="85" stroke="#c47a1b" stroke-width="2.5"/>
+          <line x1="198" y1="132" x2="198" y2="148" stroke="#3b4f9e" stroke-width="2.5"/>
+          <text x="141" y="26" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">A₁</text>
+          <text x="141" y="155" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">B₁</text>
+          <text x="258" y="155" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">C₁</text>
+          <text x="130" y="85" font-size="18" font-weight="900" fill="#2d7a4f" font-family="Fraunces,serif">=</text>
+        </svg>
+        <h4>AB = A₁B₁ және BC = B₁C₁ (екі катет)</h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign 3: Leg + adjacent acute angle -->
+  <div class="card card-accent-rose">
+    <div class="card-title">3️⃣ Катет және оған іргелес жатқан сүйір бұрыш бойынша</div>
+    <div class="def-box" style="background:var(--rose-light);border-left-color:var(--rose);">
+      <p>Егер бір тікбұрышты үшбұрыштың <strong>катеті мен оған іргелес жатқан сүйір бұрышы</strong> сәйкесінше басқа тікбұрышты үшбұрыштың катеті мен оған іргелес жатқан сүйір бұрышына тең болса, онда мұндай үшбұрыштар тең болады.</p>
+    </div>
+    <div class="property-box"><strong>Мысал:</strong> AB = A₁B₁, ∠A = ∠A₁ → △ABC = △A₁B₁C₁</div>
+  </div>
+
+  <!-- Sign 4: Leg + opposite acute angle -->
+  <div class="card card-accent-indigo">
+    <div class="card-title">4️⃣ Катет және оған қарсы жатқан сүйір бұрыш бойынша</div>
+    <div class="def-box" style="background:var(--indigo-light);border-left-color:var(--indigo);">
+      <p>Егер бір тікбұрышты үшбұрыштың <strong>катеті мен оған қарсы жатқан сүйір бұрышы</strong> сәйкесінше басқа тікбұрышты үшбұрыштың катеті мен оған қарсы жатқан сүйір бұрышына тең болса, онда мұндай үшбұрыштар тең болады.</p>
+    </div>
+    <div class="property-box" style="background:var(--indigo-light);border-left-color:var(--indigo);"><strong style="color:var(--indigo);">Мысал:</strong> BC = B₁C₁, ∠A = ∠A₁ (BC-ға қарсы) → △ABC = △A₁B₁C₁</div>
+  </div>
+
+  <!-- Sign 5: Hypotenuse + acute angle -->
+  <div class="card card-accent-green">
+    <div class="card-title">5️⃣ Гипотенуза және сүйір бұрыш бойынша</div>
+    <div class="def-box" style="background:var(--green-light);border-left-color:var(--green);">
+      <p>Егер бір тікбұрышты үшбұрыштың <strong>гипотенузасы мен сүйір бұрышы</strong> сәйкесінше басқа тікбұрышты үшбұрыштың гипотенузасы мен сүйір бұрышына тең болса, онда мұндай үшбұрыштар тең болады.</p>
+    </div>
+    <div class="property-box" style="background:var(--green-light);border-left-color:var(--green);"><strong style="color:var(--green);">Мысал:</strong> AC = A₁C₁, ∠A = ∠A₁ → △ABC = △A₁B₁C₁</div>
+  </div>
+
+  <!-- Summary table -->
+  <div class="card card-accent-teal">
+    <div class="card-title">📋 Жинақ кесте</div>
+    <table class="info-table">
+      <thead><tr><th>№</th><th>Теңдік белгісі</th><th>Тең элементтер</th><th>Белгілеу</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Гипотенуза + катет</td><td>c, a (немесе b)</td><td class="highlight">ГК</td></tr>
+        <tr><td>2</td><td>Екі катет</td><td>a, b</td><td class="highlight">КК</td></tr>
+        <tr><td>3</td><td>Катет + іргелес сүйір бұрыш</td><td>a, α (іргелес)</td><td class="highlight">КСБ (іргелес)</td></tr>
+        <tr><td>4</td><td>Катет + қарсы сүйір бұрыш</td><td>a, β (қарсы)</td><td class="highlight">КСБ (қарсы)</td></tr>
+        <tr><td>5</td><td>Гипотенуза + сүйір бұрыш</td><td>c, α</td><td class="highlight">ГСБ</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Interactive congruence checker -->
+  <div class="card card-accent-amber">
+    <div class="card-title">🔍 Теңдік белгісін тексер! <span class="badge badge-amber">Интерактив</span></div>
+    <p class="body-text" style="margin-bottom:18px;">Берілген деректерді таңдап, қандай теңдік белгісі қолданылатынын анықта:</p>
+    <div class="ctrl-row">
+      <div class="ctrl-group">
+        <label>Тең элементтер</label>
+        <select id="signSelect" onchange="checkSign()">
+          <option value="">— Таңда —</option>
+          <option value="hk">Гипотенуза + катет (c, a)</option>
+          <option value="kk">Екі катет (a, b)</option>
+          <option value="ksc">Катет + іргелес бұрыш (a, α)</option>
+          <option value="ksq">Катет + қарсы бұрыш (a, β)</option>
+          <option value="hs">Гипотенуза + сүйір бұрыш (c, α)</option>
+          <option value="none">Жеткіліксіз деректер</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="checkSign()">Тексер</button>
+    </div>
+    <div class="result-panel info" id="signResult">
+      <div class="result-title" id="signTitle"></div>
+      <div class="result-body" id="signBody"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========= PROPERTIES ========= -->
+<section id="properties" class="section">
+  <div class="sec-title">⚡ Тікбұрышты үшбұрыштың қасиеттері</div>
+  <p class="sec-sub">3.13 — Тікбұрышты үшбұрышқа тән арнайы қасиеттер</p>
+
+  <div class="card card-accent-amber">
+    <div class="card-title">🔸 Қасиет 1: Гипотенуза > катет <span class="badge badge-amber">Негізгі</span></div>
+    <p class="body-text">Тікбұрышты үшбұрыштың <span class="hl-a">гипотенузасы</span> кез келген катеттен үлкен болады.</p>
+    <div class="grid2" style="margin-top:16px;">
+      <div class="theorem-box">
+        <p>Тікбұрышты үшбұрышта:<br>c &gt; a және c &gt; b<br><span style="font-size:0.85rem;color:var(--text-3);">гипотенуза (&gt;) кез келген катет</span></p>
+      </div>
+      <div class="def-box">
+        <p><strong>Дәлел:</strong> Тікбұрышты үшбұрышта тік бұрыш — ең үлкен бұрыш (90°). Ең үлкен бұрышқа қарсы — ең ұзын қабырға. Демек, тік бұрышқа қарсы жатқан гипотенуза ең ұзын.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-teal">
+    <div class="card-title">🔹 Қасиет 2: 30°-қа тең бұрышқа қарсы катет <span class="badge badge-teal">Маңызды</span></div>
+    <div class="theorem-box">
+      <p>Тікбұрышты үшбұрышта гипотенузаның жартысына тең катет 30°-қа тең бұрышқа қарсы жатады.</p>
+    </div>
+    <div class="grid2" style="margin-top:16px;">
+      <div>
+        <div class="def-box">
+          <p><strong>Берілгені:</strong> △ABC (∠C=90°), BC = ½·AB<br>
+          <strong>Дәлелдеу керек:</strong> ∠BAC = 30°</p>
+        </div>
+        <div class="property-box">
+          <strong>Дәлелдеме:</strong> BD = BC болатындай D нүктесін AB-ға белгілейміз. △ABD теңбүйірлі болғандықтан (BD=BC), ∠BAD = ∠BDA. AC = CD = AD, △ACD тең жақты → ∠A = 60°/2 = 30°.
+        </div>
+        <table class="proof-table" style="margin-top:14px;">
+          <thead><tr><th>#</th><th>Тұжырым</th><th>Негіздеме</th></tr></thead>
+          <tbody>
+            <tr><td><div class="step-num">1</div></td><td><div class="stmt">BD = BC</div></td><td>Берілген кесіндіге тең кесінді салу аксиомасы</td></tr>
+            <tr><td><div class="step-num">2</div></td><td><div class="stmt">△ABD — теңбүйірлі</div></td><td>AB ортасынан BD = BC</td></tr>
+            <tr><td><div class="step-num">3</div></td><td><div class="stmt">AC = CD = AD</div></td><td>BC = ½AB болғандықтан</td></tr>
+            <tr><td><div class="step-num">4</div></td><td><div class="stmt">∠A = 60°</div></td><td>△ACD тең қабырғалы, барлық бұрышы 60°</td></tr>
+            <tr><td><div class="step-num">5</div></td><td><div class="stmt">∠BAC = ∠BAD = 30°</div></td><td>AB — биссектриса</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="diagram-wrap">
+        <svg width="100%" viewBox="0 0 260 200">
+          <!-- Main triangle -->
+          <polygon points="20,170 130,20 240,170" fill="rgba(13,115,119,0.05)" stroke="#0d7377" stroke-width="2"/>
+          <!-- Right angle at A(130,20)? No - let's do: ABC with C=90° at bottom left -->
+          <!-- Actually: A top, B bottom-left (right angle), C bottom-right -->
+          <polygon points="130,20 20,170 240,170" fill="rgba(13,115,119,0.05)" stroke="#0d7377" stroke-width="2"/>
+          <rect x="20" y="158" width="12" height="12" fill="none" stroke="#0d7377" stroke-width="2"/>
+          <!-- median line red -->
+          <line x1="130" y1="20" x2="130" y2="170" stroke="#b5384a" stroke-width="2" stroke-dasharray="5,3"/>
+          <!-- D point at midpoint of hypotenuse from A to C -->
+          <circle cx="130" cy="170" r="4" fill="#c47a1b"/>
+          <!-- Labels -->
+          <text x="123" y="15" font-size="13" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">A</text>
+          <text x="6" y="185" font-size="13" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">B</text>
+          <text x="243" y="185" font-size="13" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">C</text>
+          <text x="132" y="185" font-size="11" font-weight="700" fill="#c47a1b" font-family="Fraunces,serif">D</text>
+          <!-- 30 degree -->
+          <path d="M30,170 A20,20 0 0,0 20,148" fill="none" stroke="#b5384a" stroke-width="2"/>
+          <text x="38" y="162" font-size="12" fill="#b5384a" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">30°</text>
+          <!-- Tick marks - BC = half AB -->
+          <text x="50" y="100" font-size="11" fill="#0d7377" font-weight="600" font-family="Plus Jakarta Sans,sans-serif">BC=½AB</text>
+          <!-- 60 degree at A -->
+          <text x="120" y="50" font-size="11" fill="#3b4f9e" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">60°</text>
+        </svg>
+        <h4>BC = ½·AB → ∠BAC = 30°</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-rose">
+    <div class="card-title">🔸 Кері тұжырым <span class="badge badge-rose">Кері теорема</span></div>
+    <div class="theorem-box" style="background:var(--rose-light);border-color:rgba(181,56,74,0.25);">
+      <p style="color:var(--rose);">30°-қа тең бұрышқа қарсы жатқан катет гипотенузаның жартысына тең болады.</p>
+    </div>
+    <div class="property-box" style="background:var(--rose-light);border-left-color:var(--rose);">
+      Яғни: ∠BAC = 30° → BC = ½·AB. Бұл кері тұжырым да дұрыс!
+    </div>
+  </div>
+
+  <div class="card card-accent-indigo">
+    <div class="card-title">📐 Арнайы тікбұрышты үшбұрыштар <span class="badge badge-indigo">Кесте</span></div>
+    <table class="info-table">
+      <thead><tr><th>Бұрыштар</th><th>Катет a</th><th>Катет b</th><th>Гипотенуза c</th><th>Қатынас</th></tr></thead>
+      <tbody>
+        <tr><td><strong>30°–60°–90°</strong></td><td>1</td><td>√3</td><td>2</td><td class="highlight">a : b : c = 1 : √3 : 2</td></tr>
+        <tr><td><strong>45°–45°–90°</strong></td><td>1</td><td>1</td><td>√2</td><td class="highlight">a : b : c = 1 : 1 : √2</td></tr>
+        <tr><td><strong>30°–60°–90°</strong></td><td>3</td><td>3√3</td><td>6</td><td class="highlight">BC=½·AB: 3=½·6</td></tr>
+        <tr><td><strong>30°–60°–90°</strong></td><td>5</td><td>5√3</td><td>10</td><td class="highlight">BC=½·AB: 5=½·10</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card card-accent-green">
+    <div class="card-title">🧮 Бұрыш бойынша катет есептеуші <span class="badge badge-green">Интерактив</span></div>
+    <p class="body-text" style="margin-bottom:16px;">Гипотенуза мен бұрышты енгіз — катетті автоматты есептейді:</p>
+    <div class="ctrl-row">
+      <div class="ctrl-group">
+        <label>Гипотенуза (c)</label>
+        <input type="number" id="hyp-input" value="10" min="1" step="0.1">
+      </div>
+      <div class="ctrl-group">
+        <label>Бұрыш α (градус)</label>
+        <input type="number" id="angle-input" value="30" min="1" max="89" step="1">
+      </div>
+      <button class="btn btn-primary" onclick="calcLegs()">Есепте</button>
+    </div>
+    <div class="result-panel info" id="legsResult">
+      <div class="result-title">Нәтиже</div>
+      <div class="result-body" id="legsBody"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========= RESEARCH ========= -->
+<section id="research" class="section">
+  <div class="sec-title">🔬 Зерттеу жұмысы</div>
+  <p class="sec-sub">Тікбұрышты үшбұрышты практикалық зерттеу — қадамдар бойынша</p>
+
+  <div class="research-card">
+    <div class="research-title">🎯 Зерттеу мақсаты</div>
+    <div class="research-subtitle">Тікбұрышты үшбұрышта 30°-қа тең бұрышқа қарсы жатқан катет пен гипотенуза арасындағы байланысты зерттеу</div>
+    <div class="step-flow">
+      <div class="step-item">
+        <div class="step-num-circle">1</div>
+        <div class="step-content"><strong>Болжам жаса:</strong> 30°-қа тең бұрышқа қарсы жатқан катет гипотенузаның жартысына тең болады деп болжаймыз.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num-circle">2</div>
+        <div class="step-content"><strong>Тәжірибе жаса:</strong> Төмендегі интерактивті зерттеу аспабын қолданып, әртүрлі гипотенуза мәндері үшін 30°-қа қарсы катетті өлше.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num-circle">3</div>
+        <div class="step-content"><strong>Мәліметтер жина:</strong> Кестеге нәтижелерді жаз, заңдылықты іздестір.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num-circle">4</div>
+        <div class="step-content"><strong>Қорытынды жаса:</strong> Алынған мәліметтер негізінде болжамды растаңыз немесе жоққа шығарыңыз.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-teal">
+    <div class="card-title">🔭 Интерактивті зерттеу аспабы</div>
+    <p class="body-text" style="margin-bottom:16px;">Гипотенузаны өзгертіп, 30°-қа қарсы катеттің өзгеруін байқа:</p>
+    <div style="margin-bottom:12px;">
+      <div class="slider-label"><span>Гипотенуза (c)</span><span class="slider-val" id="hypVal">10</span></div>
+      <input type="range" min="4" max="30" value="10" id="hypSlider" oninput="updateResearch()">
+    </div>
+    <div class="canvas-section" style="margin-top:16px;">
+      <canvas id="researchCanvas" width="600" height="300"></canvas>
+    </div>
+    <div class="chip-row" id="researchChips" style="margin-top:16px;">
+      <span class="chip chip-teal" id="rc-hyp">Гипотенуза c = 10</span>
+      <span class="chip chip-amber" id="rc-cat30">Катет (30°) = 5</span>
+      <span class="chip chip-rose" id="rc-cat60">Катет (60°) = 8.66</span>
+      <span class="chip chip-indigo" id="rc-ratio">c/2 = 5</span>
+      <span class="chip chip-green" id="rc-eq">✓ Тең!</span>
+    </div>
+  </div>
+
+  <div class="card card-accent-amber">
+    <div class="card-title">📊 Зерттеу кестесі</div>
+    <table class="info-table" id="researchTable">
+      <thead><tr><th>Гипотенуза c</th><th>30°-қа қарсы катет a</th><th>c/2</th><th>Теңдік?</th></tr></thead>
+      <tbody>
+        <tr><td>6</td><td>3</td><td>3</td><td class="highlight">✅ Тең</td></tr>
+        <tr><td>8</td><td>4</td><td>4</td><td class="highlight">✅ Тең</td></tr>
+        <tr><td>10</td><td>5</td><td>5</td><td class="highlight">✅ Тең</td></tr>
+        <tr><td>12</td><td>6</td><td>6</td><td class="highlight">✅ Тең</td></tr>
+        <tr><td>15</td><td>7.5</td><td>7.5</td><td class="highlight">✅ Тең</td></tr>
+        <tr><td>20</td><td>10</td><td>10</td><td class="highlight">✅ Тең</td></tr>
+      </tbody>
+    </table>
+    <div class="property-box" style="margin-top:16px;">
+      <strong>Қорытынды:</strong> Кестедегі барлық нәтижелер <strong>a = c/2</strong> теңдігін растайды. Яғни, 30°-қа тең бұрышқа қарсы жатқан катет гипотенузаның жартысына тең! ✅
+    </div>
+  </div>
+
+  <div class="card card-accent-rose">
+    <div class="card-title">🔎 ΔABD = ΔACD теңдігін зерттеу (Есеп 2 негізінде)</div>
+    <p class="body-text" style="margin-bottom:16px;">Төмендегі сызбалардың қайсысында ΔABD = ΔACD екенін анықта:</p>
+    <div class="grid2">
+      <div class="diagram-wrap" style="cursor:pointer;" onclick="checkCongruence('ромб')">
+        <svg width="100%" viewBox="0 0 200 180">
+          <!-- Rhombus: A left, B top, D right, C bottom, diagonal AD red -->
+          <polygon points="100,10 180,90 100,170 20,90" fill="rgba(13,115,119,0.05)" stroke="#0d7377" stroke-width="1.5"/>
+          <line x1="20" y1="90" x2="180" y2="90" stroke="#b5384a" stroke-width="2"/>
+          <circle cx="100" cy="10" r="4" fill="#0d7377"/>
+          <circle cx="100" cy="170" r="4" fill="#0d7377"/>
+          <text x="94" y="8" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">B</text>
+          <text x="8" y="94" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">A</text>
+          <text x="184" y="94" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">D</text>
+          <text x="94" y="184" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">C</text>
+          <!-- tick marks -->
+          <line x1="52" y1="46" x2="60" y2="56" stroke="#0d7377" stroke-width="2"/>
+          <line x1="140" y1="126" x2="148" y2="136" stroke="#0d7377" stroke-width="2"/>
+        </svg>
+        <h4>Сызба 1: Ромб ABDC</h4>
+      </div>
+      <div class="diagram-wrap" style="cursor:pointer;" onclick="checkCongruence('тік')">
+        <svg width="100%" viewBox="0 0 200 180">
+          <!-- Rectangle ABCD with diagonal BD -->
+          <polygon points="20,160 20,20 180,20 180,160" fill="rgba(196,122,27,0.05)" stroke="#c47a1b" stroke-width="1.5"/>
+          <line x1="20" y1="160" x2="180" y2="20" stroke="#b5384a" stroke-width="2"/>
+          <rect x="20" y="20" width="12" height="12" fill="none" stroke="#0d7377" stroke-width="2"/>
+          <rect x="168" y="148" width="12" height="12" fill="none" stroke="#0d7377" stroke-width="2"/>
+          <text x="6" y="20" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">B</text>
+          <text x="6" y="175" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">A</text>
+          <text x="184" y="20" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">C</text>
+          <text x="184" y="175" font-size="12" font-weight="700" fill="#1a1714" font-family="Fraunces,serif">D</text>
+          <line x1="24" y1="32" x2="32" y2="24" stroke="#0d7377" stroke-width="2"/>
+          <line x1="164" y1="156" x2="172" y2="148" stroke="#0d7377" stroke-width="2"/>
+        </svg>
+        <h4>Сызба 2: Тікбұрышты ABCD</h4>
+      </div>
+    </div>
+    <div class="result-panel" id="congruenceResult">
+      <div class="result-title" id="congTitle"></div>
+      <div class="result-body" id="congBody"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========= INTERACTIVE ========= -->
+<section id="interactive" class="section">
+  <div class="sec-title">🖥️ Интерактивті аспаптар</div>
+  <p class="sec-sub">Тікбұрышты үшбұрышты динамикалық зерттеу</p>
+
+  <div class="canvas-section" style="margin-bottom:24px;">
+    <div class="card-title">📐 Тікбұрышты үшбұрыш — элементтерін өзгерт</div>
+    <p class="body-text" style="margin-bottom:16px;">Нүктелерді сүйреп жылжыт немесе параметрлерді өзгерт:</p>
+    <div class="ctrl-row">
+      <div class="ctrl-group">
+        <label>Катет BC (a)</label>
+        <input type="number" id="leg-a" value="6" min="1" max="20" step="0.5">
+      </div>
+      <div class="ctrl-group">
+        <label>Катет AB (b)</label>
+        <input type="number" id="leg-b" value="8" min="1" max="20" step="0.5">
+      </div>
+      <button class="btn btn-primary" onclick="updateTriangle()">Жаңарт</button>
+      <button class="btn btn-secondary" onclick="setSpecial('30')">30°–60° үшбұрыш</button>
+      <button class="btn btn-secondary" onclick="setSpecial('45')">45°–45° үшбұрыш</button>
+    </div>
+    <canvas id="triCanvas" width="580" height="320" style="margin-top:16px;"></canvas>
+    <div class="chip-row" id="triChips" style="margin-top:12px;">
+      <span class="chip chip-teal" id="tc-a">BC = –</span>
+      <span class="chip chip-amber" id="tc-b">AB = –</span>
+      <span class="chip chip-rose" id="tc-c">AC = –</span>
+      <span class="chip chip-indigo" id="tc-alpha">∠BCA = –°</span>
+      <span class="chip chip-green" id="tc-beta">∠BAC = –°</span>
+      <span class="chip chip-teal" id="tc-check">BC = ½·AC?</span>
+    </div>
+  </div>
+
+  <div class="card card-accent-amber">
+    <div class="card-title">🧮 Тікбұрышты үшбұрыш есептеуші</div>
+    <p class="body-text" style="margin-bottom:16px;">Кез келген 2 элементті енгіз — қалғандарын автоматты есептейді:</p>
+    <div class="ctrl-row">
+      <div class="ctrl-group">
+        <label>Катет a</label>
+        <input type="number" id="ca" placeholder="–" step="0.01">
+      </div>
+      <div class="ctrl-group">
+        <label>Катет b</label>
+        <input type="number" id="cb" placeholder="–" step="0.01">
+      </div>
+      <div class="ctrl-group">
+        <label>Гипотенуза c</label>
+        <input type="number" id="cc" placeholder="–" step="0.01">
+      </div>
+      <div class="ctrl-group">
+        <label>Бұрыш α (°)</label>
+        <input type="number" id="cA" placeholder="–" min="1" max="89">
+      </div>
+      <button class="btn btn-amber" onclick="solveTriangle()">Есепте</button>
+    </div>
+    <div class="result-panel info" id="solveResult">
+      <div class="result-title">Үшбұрыш элементтері</div>
+      <div class="result-body" id="solveBody"></div>
+    </div>
+  </div>
+
+  <div class="card card-accent-rose">
+    <div class="card-title">🎨 Питагор үшбұрыштары</div>
+    <p class="body-text" style="margin-bottom:14px;">Питагор санының үштіктерін тексер:</p>
+    <div class="ctrl-row">
+      <div class="ctrl-group">
+        <label>a</label>
+        <input type="number" id="py-a" value="3" min="1">
+      </div>
+      <div class="ctrl-group">
+        <label>b</label>
+        <input type="number" id="py-b" value="4" min="1">
+      </div>
+      <div class="ctrl-group">
+        <label>c</label>
+        <input type="number" id="py-c" value="5" min="1">
+      </div>
+      <button class="btn btn-primary" onclick="checkPythag()">Тексер</button>
+    </div>
+    <div class="result-panel" id="pythagResult">
+      <div class="result-title" id="pythagTitle"></div>
+      <div class="result-body" id="pythagBody"></div>
+    </div>
+    <div style="margin-top:16px;">
+      <p class="body-text" style="margin-bottom:10px;"><strong>Танымал Питагор үшбұрыштары:</strong></p>
+      <div class="chip-row">
+        <span class="chip chip-teal" style="cursor:pointer;" onclick="setPythag(3,4,5)">(3, 4, 5)</span>
+        <span class="chip chip-amber" style="cursor:pointer;" onclick="setPythag(5,12,13)">(5, 12, 13)</span>
+        <span class="chip chip-rose" style="cursor:pointer;" onclick="setPythag(8,15,17)">(8, 15, 17)</span>
+        <span class="chip chip-indigo" style="cursor:pointer;" onclick="setPythag(7,24,25)">(7, 24, 25)</span>
+        <span class="chip chip-green" style="cursor:pointer;" onclick="setPythag(9,40,41)">(9, 40, 41)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========= TASKS ========= -->
+<section id="tasks" class="section">
+  <div class="sec-title">📝 Есептер жинағы</div>
+  <p class="sec-sub">3.12 және 3.13 тақырыптары бойынша есептер — оқулықтан және өзіндік</p>
+
+  <!-- Task 1 -->
+  <div class="task-card">
+    <div class="task-header teal">
+      <span class="task-num teal">ЕСЕП 1</span>
+      <span class="task-title-text">Тұжырым дұрыс па?</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        Тұжырымдардың дұрыстығын анықта:<br>
+        а) Тікбұрышты үшбұрыштың гипотенузасы әрқашанда катетке тең болады.<br>
+        ə) Тікбұрышты үшбұрыштың гипотенузасы әрқашанда катеттен кіші болады.<br>
+        б) Тікбұрышты үшбұрыштың гипотенузасы әрқашанда катеттен үлкен болады.
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+      <div class="ans-box"><strong>а) Қате.</strong> Гипотенуза катетке тең болмайды (тек ерекше жағдайларда емес).<br><strong>ə) Қате.</strong> Гипотенуза катеттен кіші болмайды.<br><strong>б) Дұрыс! ✅</strong> Тікбұрышты үшбұрышта тік бұрыш — ең үлкен бұрыш (90°). Ең үлкен бұрышқа қарсы қабырға — ең ұзын. Демек гипотенуза &gt; кез келген катет.</div>
+    </div>
+  </div>
+
+  <!-- Task 2 -->
+  <div class="task-card">
+    <div class="task-header amber">
+      <span class="task-num amber">ЕСЕП 2</span>
+      <span class="task-title-text">Катет пен гипотенузаны табу</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        Тікбұрышты үшбұрыштың қабырғалары 6 см, 8 см және 10 см-ге тең.<br>
+        а) Үшбұрыштың үлкен катеті неге тең?<br>
+        б) Кіші катеті ше? Сен оны қалай анықтай аласың? Жауабыңды негізде.
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+      <div class="ans-box">
+        Питагор теоремасын тексер: 6² + 8² = 36 + 64 = 100 = 10². ✅<br><br>
+        <strong>Гипотенуза = 10 см</strong> (ең үлкен, тік бұрышқа қарсы)<br>
+        <strong>Үлкен катет = 8 см</strong> (60°-қа қарсы)<br>
+        <strong>Кіші катет = 6 см</strong> (30°-қа қарсы)<br><br>
+        Тексер: 6 = ½·12? Жоқ... Бірақ 6/10 = 0.6 = sin(37°). Бұл 30°-60°-90° емес, 37°-53°-90° үшбұрышы!
+      </div>
+    </div>
+  </div>
+
+  <!-- Task 3 -->
+  <div class="task-card">
+    <div class="task-header teal">
+      <span class="task-num teal">ЕСЕП 3</span>
+      <span class="task-title-text">Үшбұрыш сал</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        Сызғыш, бұрыштық және транспортирдің көмегімен △ABC (∠A=90°) тікбұрышты үшбұрышын сал:<br>
+        а) BC гипотенузасы 6 см-ге тең, ал ∠BCA бұрышы 30°-қа тең;<br>
+        ə) Катет 4 см-ге тең, ал гипотенуза мен осы катеттің арасындағы бұрыш 60°-қа тең.
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+      <div class="ans-box">
+        <strong>а) BC=6, ∠BCA=30°:</strong><br>
+        ∠ABC=90°, ∠BCA=30° → ∠BAC=60°.<br>
+        AB=BC·sin(30°)=6·½=3 см (30°-қа қарсы катет = гипотенузаның жартысы)<br>
+        AC=BC·cos(30°)=6·(√3/2)=3√3≈5.2 см<br><br>
+        <strong>ə) Катет=4, бұрыш=60° (катет пен гипотенуза арасы):</strong><br>
+        Гипотенуза: c=4/cos(60°)=4/(½)=8 см<br>
+        Екінші катет: b=4·tan(60°)=4√3≈6.93 см
+      </div>
+    </div>
+  </div>
+
+  <!-- Task 4 -->
+  <div class="task-card">
+    <div class="task-header rose">
+      <span class="task-num rose">ЕСЕП 4</span>
+      <span class="task-title-text">BC = ½·AB болса, ∠BAC = 30°</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        Тікбұрышты үшбұрыш қасиеттерінің бірін дәлелдемесін қарастырып түсіндірме бер.<br>
+        <strong>Берілгені:</strong> △ABC — тікбұрышты үшбұрыш, BC = ½·AB<br>
+        <strong>Дәлелдеу керек:</strong> ∠BAC = 30°
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Дәлелдемені көру</button>
+      <div class="ans-box">
+        <strong>Дәлелдеме:</strong><br>
+        1. BD = BC болатындай D нүктесін B кесіндісінен салыңыз.<br>
+        2. △ABD теңбүйірлі (BD=BC, AB ортасынан).<br>
+        3. AC = CD = AD (BC = ½AB болғандықтан).<br>
+        4. △ACD тең жақты → ∠ACD = ∠ADC = ∠CAD = 60°.<br>
+        5. ∠BAC = ∠BAD = ∠ACD/2 = 30°. ✅<br><br>
+        <strong>Кері:</strong> Шамасы 30°-қа тең бұрышқа қарсы жатқан катет гипотенузаның жартысына тең болады. ✅
+      </div>
+    </div>
+  </div>
+
+  <!-- Task 5: diagram calculations -->
+  <div class="task-card">
+    <div class="task-header amber">
+      <span class="task-num amber">ЕСЕП 5</span>
+      <span class="task-title-text">Үшбұрыш элементтерін тап (Сызба)</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        Сызбаларды қолданып, есептерді шығар. Үшбұрыштың белгісіз элементтерін тап:<br>
+        а) △ABC: ∠A=90°, гипотенуза BC=48, ∠BCA=30°. <strong>AB=?</strong><br>
+        б) △PQR: PH⊥QR, ∠QPR=30°, QH=36. <strong>HR=?</strong><br>
+        в) △MNK: ∠M=60°, ∠K=90°, MH=20 (биіктік). <strong>MN=?, HK=?</strong><br>
+        г) △ABD: ∠B=120°, BD=8, BD=DA, D ортасы. <strong>AC=?</strong>
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+      <div class="ans-box">
+        <strong>а) AB=?</strong>: ∠BCA=30°, BC=48. AB=BC·sin(30°)=48·½=<strong>24 см</strong><br><br>
+        <strong>б) HR=?</strong>: △QHR: PH⊥QR, ∠QPH=60°, QH=36. Нурлан тіктен: HR=QH·tan(30°)=36/√3=12√3≈<strong>20.78</strong><br><br>
+        <strong>в) MN=?, HK=?</strong>: ∠M=60°, MH=20. MN=MH/cos(60°)=20/(½)=<strong>40</strong>. HK=MH·tan(60°)=20√3≈<strong>34.64</strong><br><br>
+        <strong>г) AC=?</strong>: ∠B=120°, BD=DA=8, BD=AB. △ABD: ∠D=120°/2=... AC=BD·2=<strong>16</strong> (теңбүйірлі жиынтықтан)
+      </div>
+    </div>
+  </div>
+
+  <!-- Task 6 -->
+  <div class="task-card">
+    <div class="task-header indigo">
+      <span class="task-num indigo">ЕСЕП 6</span>
+      <span class="task-title-text">Нурлан есебі</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        Нурлан A бұрышы 30°-қа тең ABC (∠C=90°) тікбұрышты үшбұрышты салды. Тік бұрыштың төбесінен ол CH биіктігін жүргізді. BH=9 болса, үшбұрыштың гипотенузасы неге тең?
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+      <div class="ans-box">
+        ∠A=30°, ∠C=90°, ∠B=60°. BH=9.<br>
+        △BCH: ∠C=90°, ∠B=60°, BH — гипотенуза (тік бұрышқа қарсы).<br>
+        CH=BH·sin(60°)? Жоқ — CH биіктік, яғни ∠CHB=90°.<br>
+        △CHB: ∠HCB=?, ∠B=60°. BC=BH·cos(60°)... Бірақ BH=9 — катет.<br>
+        AB (гипотенуза): AB = BC/sin(30°) = BC/0.5 = 2·BC.<br>
+        △BCH: ∠B=60°, BH=9. BC=BH/cos(60°)=9/0.5=18. AB=2·BC/2=... AB=BC/sin(30°)=18/0.5=<strong>36</strong><br>
+        Тексер: BH=AB·cos²(∠A)? BH=AB·sin(∠B)·cos(∠B)... немесе: BC²=BH·BA → 18²=9·BA → BA=324/9=<strong>36</strong> ✅
+      </div>
+    </div>
+  </div>
+
+  <!-- Task 7 -->
+  <div class="task-card">
+    <div class="task-header teal">
+      <span class="task-num teal">ЕСЕП 7</span>
+      <span class="task-title-text">Мысырлық арқан — тікбұрышты үшбұрыш</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        Ежелгі мысырлықтар пайдаланған 13 түйінді жіпті пайдаланып тікбұрышты үшбұрыш құрастыр. Сенде неше үшбұрыш шықты? Құралған үшбұрыштың қабырғалары неге тең?
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+      <div class="ans-box">
+        Периметр=12 (13 түйін = 12 бөлік). a+b+c=12, a²+b²=c² болуы керек.<br><br>
+        Тексер: (3,4,5): 3+4+5=12 ✓, 9+16=25 ✓ ✅<br>
+        Тексер: (5,12,13): қосындысы=30 ✗<br>
+        Тексер: (2,5,6): 4+25=29≠36 ✗<br><br>
+        <strong>Жауап: Тек БІР тікбұрышты үшбұрыш — (3, 4, 5)!</strong><br>
+        Мысырлықтар осы 3:4:5 қатынасын тік бұрышты жасау үшін пайдаланған.
+      </div>
+    </div>
+  </div>
+
+  <!-- Task 8: New tasks -->
+  <div class="task-card">
+    <div class="task-header amber">
+      <span class="task-num amber">ЕСЕП 8</span>
+      <span class="task-title-text">Теңдік белгісін анықта</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        △ABC (∠B=90°) және △A₁B₁C₁ (∠B₁=90°). Берілген мәліметтер бойынша теңдік белгісін атай:<br>
+        а) AC=A₁C₁, AB=A₁B₁<br>
+        б) AB=A₁B₁, BC=B₁C₁<br>
+        в) AB=A₁B₁, ∠A=∠A₁<br>
+        г) AC=A₁C₁, ∠A=∠A₁<br>
+        д) BC=B₁C₁, ∠A=∠A₁ (BC-ға қарсы)
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+      <div class="ans-box">
+        <strong>а)</strong> AC=A₁C₁ (гипотенуза) + AB=A₁B₁ (катет) → <strong>Гипотенуза+катет (ГК)</strong> белгісі<br>
+        <strong>б)</strong> AB=A₁B₁ + BC=B₁C₁ (екі катет) → <strong>Екі катет (КК)</strong> белгісі<br>
+        <strong>в)</strong> AB=A₁B₁ (катет) + ∠A=∠A₁ (іргелес бұрыш) → <strong>Катет+іргелес сүйір бұрыш</strong><br>
+        <strong>г)</strong> AC=A₁C₁ (гипотенуза) + ∠A=∠A₁ (сүйір бұрыш) → <strong>Гипотенуза+сүйір бұрыш (ГСБ)</strong><br>
+        <strong>д)</strong> BC=B₁C₁ (катет) + ∠A=∠A₁ (қарсы бұрыш) → <strong>Катет+қарсы сүйір бұрыш</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task 9 -->
+  <div class="task-card">
+    <div class="task-header rose">
+      <span class="task-num rose">ЕСЕП 9</span>
+      <span class="task-title-text">Тік бұрышты тексер</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        Үшбұрыштың қабырғалары берілген. Тікбұрышты үшбұрыш па? Гипотенузасы қайсысы?<br>
+        а) 9, 40, 41  б) 20, 21, 29  в) 11, 60, 61  г) 10, 24, 26  д) 6, 8, 11
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+      <div class="ans-box">
+        <strong>а)</strong> 9²+40²=81+1600=1681=41² ✅ Тікбұрышты! Гипотенуза=41<br>
+        <strong>б)</strong> 20²+21²=400+441=841=29² ✅ Тікбұрышты! Гипотенуза=29<br>
+        <strong>в)</strong> 11²+60²=121+3600=3721=61² ✅ Тікбұрышты! Гипотенуза=61<br>
+        <strong>г)</strong> 10²+24²=100+576=676=26² ✅ Тікбұрышты! Гипотенуза=26<br>
+        <strong>д)</strong> 6²+8²=36+64=100≠121=11² ❌ Тікбұрышты емес!
+      </div>
+    </div>
+  </div>
+
+  <!-- Task 10 -->
+  <div class="task-card">
+    <div class="task-header indigo">
+      <span class="task-num indigo">ЕСЕП 10</span>
+      <span class="task-title-text">30-60-90 үшбұрышы</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        30°-60°-90° тікбұрышты үшбұрышта:<br>
+        а) Гипотенуза c=24. 30°-қа қарсы катет a=? 60°-қа қарсы катет b=?<br>
+        б) 30°-қа қарсы катет a=7. Гипотенуза c=? 60°-қа қарсы катет b=?<br>
+        в) 60°-қа қарсы катет b=9√3. Гипотенуза c=? 30°-қа қарсы катет a=?
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+      <div class="ans-box">
+        Формула: a:b:c = 1:√3:2 (30°:60°:90°)<br><br>
+        <strong>а)</strong> c=24. a=c/2=<strong>12</strong>. b=c·√3/2=<strong>12√3≈20.8</strong><br>
+        <strong>б)</strong> a=7. c=2a=<strong>14</strong>. b=a·√3=<strong>7√3≈12.1</strong><br>
+        <strong>в)</strong> b=9√3. a=b/√3=9. c=2a=<strong>18</strong>. a=<strong>9</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task 11 -->
+  <div class="task-card">
+    <div class="task-header teal">
+      <span class="task-num teal">ЕСЕП 11</span>
+      <span class="task-title-text">45-45-90 үшбұрышы</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        45°-45°-90° тікбұрышты үшбұрышта:<br>
+        а) Катет a=10. Гипотенуза c=? Екінші катет b=?<br>
+        б) Гипотенуза c=8√2. Катеттер a=b=?
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+      <div class="ans-box">
+        Формула: a:b:c = 1:1:√2 (45°:45°:90°)<br><br>
+        <strong>а)</strong> a=10. b=a=<strong>10</strong>. c=a√2=<strong>10√2≈14.14</strong><br>
+        <strong>б)</strong> c=8√2. a=b=c/√2=8√2/√2=<strong>8</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task 12 -->
+  <div class="task-card">
+    <div class="task-header amber">
+      <span class="task-num amber">ЕСЕП 12</span>
+      <span class="task-title-text">Жаңа есептер</span>
+    </div>
+    <div class="task-body">
+      <div class="task-text">
+        а) △ABC (∠B=90°) тікбұрышты үшбұрышта AB=5, BC=12. AC=? және бұрыштарды табу.<br>
+        б) Тікбұрышты үшбұрыштың гипотенузасы 26, 10°-қа бір бұрышы. Осы бұрышқа іргелес катеті неге тең?<br>
+        в) ∠A=30° болатын тікбұрышты △ABC-де BC катеті 6. AB гипотенузасын тап.
+      </div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">💡 Жауапты көру</button>
+      <div class="ans-box">
+        <strong>а)</strong> AC²=AB²+BC²=25+144=169=13². AC=<strong>13</strong>.<br>
+        ∠A=arctan(BC/AB)=arctan(12/5)≈67.4°. ∠C=90°-67.4°≈22.6°<br><br>
+        <strong>б)</strong> Іргелес катет = c·cos(10°) = 26·cos(10°) ≈ 26·0.985 ≈ <strong>25.6</strong><br><br>
+        <strong>в)</strong> ∠A=30°, BC=6 (∠A-ға қарсы). BC=½·AB → AB=2·BC=<strong>12</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========= QUIZ ========= -->
+<section id="quiz" class="section">
+  <div class="sec-title">🏆 Тест</div>
+  <p class="sec-sub">3.12–3.13 тақырыптары бойынша тест сұрақтары</p>
+
+  <div id="quizContainer">
+    <div class="quiz-q" data-answer="2">
+      <div class="q-text">1. Тікбұрышты үшбұрышта гипотенуза нені білдіреді?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answerQ(this,0)">Тік бұрышқа жанасатын қабырға</button>
+        <button class="q-opt" onclick="answerQ(this,1)">Ең қысқа қабырға</button>
+        <button class="q-opt" onclick="answerQ(this,2)">Тік бұрышқа қарсы жатқан қабырға</button>
+        <button class="q-opt" onclick="answerQ(this,3)">Кез келген қабырға</button>
+      </div>
+      <div class="q-feedback">Гипотенуза — тік бұрышқа (90°) қарсы жатқан, ең ұзын қабырға!</div>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <div class="q-text">2. 30°-60°-90° үшбұрышында катеттер мен гипотенузаның қатынасы?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answerQ(this,0)">1 : 1 : √2</button>
+        <button class="q-opt" onclick="answerQ(this,1)">1 : √3 : 2</button>
+        <button class="q-opt" onclick="answerQ(this,2)">1 : 2 : 3</button>
+        <button class="q-opt" onclick="answerQ(this,3)">√2 : √3 : 2</button>
+      </div>
+      <div class="q-feedback">30°-60°-90° үшбұрышында a:b:c = 1:√3:2</div>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <div class="q-text">3. Тікбұрышты үшбұрышта ∠B=90°, BC=5 (30°-қа қарсы). Гипотенуза AB=?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answerQ(this,0)">10</button>
+        <button class="q-opt" onclick="answerQ(this,1)">5√3</button>
+        <button class="q-opt" onclick="answerQ(this,2)">5√2</button>
+        <button class="q-opt" onclick="answerQ(this,3)">15</button>
+      </div>
+      <div class="q-feedback">BC = ½·AB → AB = 2·BC = 2·5 = 10</div>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <div class="q-text">4. Тікбұрышты үшбұрыштардың теңдік белгілері нешеу?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answerQ(this,0)">3</button>
+        <button class="q-opt" onclick="answerQ(this,1)">4</button>
+        <button class="q-opt" onclick="answerQ(this,2)">6</button>
+        <button class="q-opt" onclick="answerQ(this,3)">5</button>
+      </div>
+      <div class="q-feedback">Тікбұрышты үшбұрыштарда 5 арнайы теңдік белгісі бар!</div>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <div class="q-text">5. 45°-45°-90° тікбұрышты үшбұрышта катет a=8. Гипотенуза c=?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answerQ(this,0)">8</button>
+        <button class="q-opt" onclick="answerQ(this,1)">16</button>
+        <button class="q-opt" onclick="answerQ(this,2)">8√2</button>
+        <button class="q-opt" onclick="answerQ(this,3)">4√2</button>
+      </div>
+      <div class="q-feedback">45°-45°-90°: c = a√2 = 8√2</div>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <div class="q-text">6. △ABC (∠B=90°) мен △A₁B₁C₁ (∠B₁=90°)-де: AC=A₁C₁, AB=A₁B₁. Теңдік белгісі?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answerQ(this,0)">Гипотенуза + катет</button>
+        <button class="q-opt" onclick="answerQ(this,1)">Екі катет</button>
+        <button class="q-opt" onclick="answerQ(this,2)">Катет + іргелес бұрыш</button>
+        <button class="q-opt" onclick="answerQ(this,3)">Жеткіліксіз деректер</button>
+      </div>
+      <div class="q-feedback">AC = A₁C₁ — гипотенуза, AB = A₁B₁ — катет → Гипотенуза+катет белгісі</div>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <div class="q-text">7. Тікбұрышты үшбұрышта тік бұрыш (90°) — ең үлкен бұрыш болғандықтан:</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answerQ(this,0)">Катет гипотенузадан үлкен</button>
+        <button class="q-opt" onclick="answerQ(this,1)">Гипотенуза кез келген катеттен үлкен</button>
+        <button class="q-opt" onclick="answerQ(this,2)">Гипотенуза екі катеттің қосындысына тең</button>
+        <button class="q-opt" onclick="answerQ(this,3)">Катеттер тең болуы керек</button>
+      </div>
+      <div class="q-feedback">Ең үлкен бұрышқа қарсы — ең ұзын қабырға. Тік бұрышқа қарсы гипотенуза — ең ұзын!</div>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <div class="q-text">8. 3:4:5 қатынасы бар үшбұрыш қандай?</div>
+      <div class="q-opts">
+        <button class="q-opt" onclick="answerQ(this,0)">Тең жақты</button>
+        <button class="q-opt" onclick="answerQ(this,1)">Тең бүйірлі</button>
+        <button class="q-opt" onclick="answerQ(this,2)">Кез келген үшбұрыш</button>
+        <button class="q-opt" onclick="answerQ(this,3)">Тікбұрышты (Питагор үшбұрышы)</button>
+      </div>
+      <div class="q-feedback">3²+4²=9+16=25=5². Питагор теоремасы орындалады → тікбұрышты!</div>
+    </div>
+  </div>
+
+  <div class="score-result" id="scoreResult">
+    <div class="score-big" id="scoreBig">0/8</div>
+    <div class="score-msg" id="scoreMsg"></div>
+  </div>
+</section>
+
+</div><!-- main -->
+
+<script>
+// ===== TAB =====
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='interactive') { setTimeout(updateTriangle,100); }
+  if(id==='research') { setTimeout(updateResearch,100); }
+}
+
+// ===== ANSWER TOGGLE =====
+function toggleAns(btn) {
+  const box = btn.nextElementSibling;
+  box.classList.toggle('show');
+  btn.textContent = box.classList.contains('show') ? '🙈 Жабу' : '💡 Жауапты көру';
+}
+
+// ===== SIGN CHECKER =====
+function checkSign() {
+  const val = document.getElementById('signSelect').value;
+  const el = document.getElementById('signResult');
+  const t = document.getElementById('signTitle');
+  const b = document.getElementById('signBody');
+  const data = {
+    hk: { title:'✅ Гипотенуза + катет бойынша теңдік', body:'Гипотенузалары мен катеттері тең тікбұрышты үшбұрыштар тең болады! Белгі: ГК' },
+    kk: { title:'✅ Екі катет бойынша теңдік', body:'Катеттері тең тікбұрышты үшбұрыштар тең болады. Гипотенузалары Питагор теоремасынан автоматты тең болады. Белгі: КК' },
+    ksc: { title:'✅ Катет + іргелес сүйір бұрыш бойынша теңдік', body:'Катет пен оған іргелес жатқан сүйір бұрышы тең болса — үшбұрыштар тең!' },
+    ksq: { title:'✅ Катет + қарсы сүйір бұрыш бойынша теңдік', body:'Катет пен оған қарсы жатқан сүйір бұрышы тең болса — үшбұрыштар тең!' },
+    hs: { title:'✅ Гипотенуза + сүйір бұрыш бойынша теңдік', body:'Гипотенузалары мен сүйір бұрыштары тең болса — үшбұрыштар тең! Белгі: ГСБ' },
+    none: { title:'❌ Жеткіліксіз деректер', body:'Бұл мәліметтер тікбұрышты үшбұрыштардың теңдігін дәлелдеуге жеткіліксіз.' },
+    '': { title:'Таңдау жасаңыз', body:'Жоғарыдағы тізімнен бір вариантты таңдаңыз.' }
+  };
+  const d = data[val]||data[''];
+  t.textContent = d.title;
+  b.textContent = d.body;
+  el.className = 'result-panel ' + (val&&val!=='none'?'success':val==='none'?'error':'info') + ' show';
+}
+
+// ===== CALC LEGS =====
+function calcLegs() {
+  const c = parseFloat(document.getElementById('hyp-input').value);
+  const alpha = parseFloat(document.getElementById('angle-input').value);
+  if(!c||!alpha||alpha<=0||alpha>=90) return;
+  const rad = alpha*Math.PI/180;
+  const a = (c*Math.sin(rad)).toFixed(3);
+  const b = (c*Math.cos(rad)).toFixed(3);
+  const el = document.getElementById('legsResult');
+  el.className = 'result-panel info show';
+  document.getElementById('legsBody').innerHTML =
+    `Гипотенуза: c = ${c}<br>
+    Бұрыш α = ${alpha}°<br><br>
+    <strong>${alpha}°-қа қарсы катет a = c·sin(${alpha}°) = ${a}</strong><br>
+    <strong>${90-alpha}°-қа қарсы катет b = c·cos(${alpha}°) = ${b}</strong><br><br>
+    ${alpha==30?`✅ Тексер: a = ${a} = c/2 = ${c/2} ${Math.abs(parseFloat(a)-c/2)<0.01?'✅ Тең!':''}`:''}`
+}
+
+// ===== RESEARCH CANVAS =====
+function updateResearch() {
+  const c = parseFloat(document.getElementById('hypSlider').value);
+  document.getElementById('hypVal').textContent = c;
+  const a = c/2; // 30° side
+  const b = c*Math.sqrt(3)/2; // 60° side
+  document.getElementById('rc-hyp').textContent = `Гипотенуза c = ${c}`;
+  document.getElementById('rc-cat30').textContent = `Катет (30°) = ${a}`;
+  document.getElementById('rc-cat60').textContent = `Катет (60°) = ${b.toFixed(2)}`;
+  document.getElementById('rc-ratio').textContent = `c/2 = ${c/2}`;
+  document.getElementById('rc-eq').textContent = '✅ a = c/2 тең!';
+
+  const cv = document.getElementById('researchCanvas');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.clearRect(0,0,W,H);
+
+  // Background
+  ctx.fillStyle = '#f0ede8';
+  ctx.roundRect(0,0,W,H,12);
+  ctx.fill();
+
+  // Grid
+  ctx.strokeStyle='rgba(13,115,119,0.06)'; ctx.lineWidth=1;
+  for(let x=0;x<=W;x+=W/20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<=H;y+=H/12){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // Draw 30-60-90 triangle
+  const scale = Math.min((W*0.7)/c, (H*0.7)/b);
+  const ox = W*0.15, oy = H*0.85;
+  const Ax = ox, Ay = oy - b*scale; // A top (90°)
+  const Bx = ox, By = oy;           // B bottom-left (right angle)
+  const Cx = ox + a*scale*2, Cy = oy; // C bottom-right... wait
+  // Actually: Right angle at B, 30° at C, 60° at A
+  // BC = a (opposite 30°), AB = b (opposite 60°), AC = c (hypotenuse)
+  const bx = W*0.12, by = H*0.82;
+  const ax = bx, ay = by - b*scale;
+  const cx2 = bx + a*scale, cy2 = by;
+
+  // Triangle fill
+  ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.lineTo(cx2,cy2);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(13,115,119,0.08)'; ctx.fill();
+  ctx.strokeStyle='#0d7377'; ctx.lineWidth=2.5; ctx.stroke();
+
+  // Right angle mark
+  ctx.strokeStyle='#0d7377'; ctx.lineWidth=2;
+  ctx.strokeRect(bx, by-12, 12, 12);
+
+  // Vertex labels
+  ctx.font = 'bold 14px Fraunces, serif'; ctx.fillStyle='#1a1714';
+  ctx.fillText('A', ax-20, ay+4);
+  ctx.fillText('B', bx-18, by+4);
+  ctx.fillText('C', cx2+6, cy2+4);
+
+  // Side labels
+  ctx.font = 'bold 12px Plus Jakarta Sans, sans-serif';
+  ctx.fillStyle='#b5384a';
+  ctx.fillText(`BC=${a}`, (bx+cx2)/2-15, cy2+22);
+  ctx.fillStyle='#3b4f9e';
+  ctx.fillText(`AB=${b.toFixed(1)}`, bx-55, (ay+by)/2);
+  ctx.fillStyle='#c47a1b';
+  const midHypX=(ax+cx2)/2+5, midHypY=(ay+cy2)/2;
+  ctx.save(); ctx.translate(midHypX,midHypY);
+  ctx.rotate(Math.atan2(cy2-ay, cx2-ax));
+  ctx.fillText(`AC=${c}`, -10, -8);
+  ctx.restore();
+
+  // Angle marks
+  ctx.font='bold 11px Plus Jakarta Sans,sans-serif';
+  ctx.fillStyle='#b5384a';
+  ctx.fillText('30°', cx2-38, cy2-8);
+  ctx.fillStyle='#3b4f9e';
+  ctx.fillText('60°', ax+8, ay+18);
+
+  // Highlight: BC and c/2
+  ctx.strokeStyle='#2d7a4f'; ctx.lineWidth=2; ctx.setLineDash([5,3]);
+  const midCx = (bx+cx2)/2;
+  ctx.beginPath(); ctx.moveTo(midCx, by-20); ctx.lineTo(midCx, by+20); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.font='bold 11px Plus Jakarta Sans,sans-serif'; ctx.fillStyle='#2d7a4f';
+  ctx.fillText(`BC = c/2 = ${a}`, midCx+8, by-5);
+
+  // Formula box
+  const fx=W*0.58, fy=H*0.12;
+  ctx.fillStyle='rgba(255,255,255,0.95)';
+  ctx.beginPath(); ctx.roundRect(fx, fy, 200, 80, 10); ctx.fill();
+  ctx.strokeStyle='rgba(13,115,119,0.3)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.roundRect(fx, fy, 200, 80, 10); ctx.stroke();
+  ctx.font='bold 13px Plus Jakarta Sans,sans-serif'; ctx.fillStyle='#0d7377';
+  ctx.fillText('30°-60°-90°', fx+10, fy+22);
+  ctx.font='12px Plus Jakarta Sans,sans-serif'; ctx.fillStyle='#4a4540';
+  ctx.fillText(`a = c/2 = ${a}`, fx+10, fy+44);
+  ctx.fillText(`b = c·√3/2 = ${b.toFixed(2)}`, fx+10, fy+62);
+  ctx.fillText(`c = ${c}`, fx+10, fy+78);
+}
+
+// ===== CONGRUENCE CHECK =====
+function checkCongruence(type) {
+  const el = document.getElementById('congruenceResult');
+  const t = document.getElementById('congTitle');
+  const b = document.getElementById('congBody');
+  if(type==='ромб') {
+    t.textContent='✅ ΔABD = ΔACD — Ромбда!';
+    b.textContent='Ромб ABDC-де: AB=CB (ромб қасиеті), AD ортақ. ∠B=∠D (немесе AD медиана). Гипотенуза+катет белгісі бойынша ΔABD = ΔACD.';
+    el.className='result-panel success show';
+  } else {
+    t.textContent='✅ ΔABD = ΔACD — Тікбұрышта да!';
+    b.textContent='Тікбұрышты ABCD-де: ∠A=∠D=90°, BC=AD (диагоналі тең). Гипотенуза+катет немесе екі катет белгісі бойынша ΔABD = ΔACD.';
+    el.className='result-panel success show';
+  }
+}
+
+// ===== MAIN TRIANGLE CANVAS =====
+function drawTriangle(a,b) {
+  const cv = document.getElementById('triCanvas');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  const W=cv.width, H=cv.height;
+  ctx.clearRect(0,0,W,H);
+
+  ctx.fillStyle='#f0ede8';
+  ctx.beginPath(); ctx.roundRect(0,0,W,H,12); ctx.fill();
+
+  // Grid
+  ctx.strokeStyle='rgba(0,0,0,0.05)'; ctx.lineWidth=1;
+  for(let x=0;x<=W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<=H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  const c=Math.sqrt(a*a+b*b);
+  const scale=Math.min((W*0.6)/b,(H*0.65)/a);
+  const bx=W*0.15, by=H*0.82;
+  const ax=bx, ay=by-a*scale;
+  const cx2=bx+b*scale, cy2=by;
+
+  // Triangle
+  ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.lineTo(cx2,cy2);
+  ctx.closePath();
+  ctx.fillStyle='rgba(13,115,119,0.08)'; ctx.fill();
+  ctx.strokeStyle='#0d7377'; ctx.lineWidth=2.5; ctx.stroke();
+
+  // Right angle
+  ctx.strokeStyle='#0d7377'; ctx.lineWidth=2;
+  ctx.strokeRect(bx, by-14, 14, 14);
+
+  // Labels
+  ctx.font='bold 16px Fraunces,serif'; ctx.fillStyle='#1a1714';
+  ctx.fillText('A', ax-22, ay+5);
+  ctx.fillText('B', bx-20, by+5);
+  ctx.fillText('C', cx2+7, cy2+5);
+
+  // Angles
+  const alpha=(Math.atan2(b,a)*180/Math.PI).toFixed(1);
+  const beta=(Math.atan2(a,b)*180/Math.PI).toFixed(1);
+  ctx.font='bold 12px Plus Jakarta Sans,sans-serif';
+  ctx.fillStyle='#b5384a'; ctx.fillText(`∠A=${alpha}°`, ax+8, ay+20);
+  ctx.fillStyle='#3b4f9e'; ctx.fillText(`∠C=${beta}°`, cx2-65, cy2-10);
+
+  // Side labels
+  ctx.fillStyle='#c47a1b'; ctx.fillText(`a=${a}`, bx-40, (ay+by)/2);
+  ctx.fillStyle='#3b4f9e'; ctx.fillText(`b=${b}`, (bx+cx2)/2-10, cy2+22);
+  ctx.fillStyle='#b5384a';
+  const mx=(ax+cx2)/2, my=(ay+cy2)/2;
+  ctx.save(); ctx.translate(mx,my); ctx.rotate(Math.atan2(cy2-ay,cx2-ax));
+  ctx.fillText(`c=${c.toFixed(2)}`, 0, -10); ctx.restore();
+
+  // Check 30° property
+  const halfC = c/2;
+  const is30 = Math.abs(a-halfC)<0.05;
+  ctx.font='bold 12px Plus Jakarta Sans,sans-serif';
+  if(is30) {
+    ctx.fillStyle='#2d7a4f';
+    ctx.fillText('✅ a = c/2  (30°-тің қасиеті!)', W*0.55, H*0.2);
+  }
+
+  // Update chips
+  document.getElementById('tc-a').textContent=`BC(a)=${a}`;
+  document.getElementById('tc-b').textContent=`AB(b)=${b}`;
+  document.getElementById('tc-c').textContent=`AC(c)=${c.toFixed(2)}`;
+  document.getElementById('tc-alpha').textContent=`∠BCA=${alpha}°`;
+  document.getElementById('tc-beta').textContent=`∠BAC=${beta}°`;
+  document.getElementById('tc-check').textContent=is30?`✅ BC=½·AC!`:`BC=½·AC? ${(a/c*2).toFixed(2)}`;
+  document.getElementById('tc-check').className='chip '+(is30?'chip-ok':'chip-amber');
+}
+
+function updateTriangle() {
+  const a=parseFloat(document.getElementById('leg-a').value)||6;
+  const b=parseFloat(document.getElementById('leg-b').value)||8;
+  drawTriangle(a,b);
+}
+
+function setSpecial(type) {
+  if(type==='30') { document.getElementById('leg-a').value=5; document.getElementById('leg-b').value=(5*Math.sqrt(3)).toFixed(2); }
+  else { document.getElementById('leg-a').value=6; document.getElementById('leg-b').value=6; }
+  updateTriangle();
+}
+
+// ===== SOLVE TRIANGLE =====
+function solveTriangle() {
+  const a=parseFloat(document.getElementById('ca').value);
+  const b=parseFloat(document.getElementById('cb').value);
+  const c=parseFloat(document.getElementById('cc').value);
+  const A=parseFloat(document.getElementById('cA').value);
+  const el=document.getElementById('solveResult');
+  let res='';
+
+  if(!isNaN(a)&&!isNaN(b)) {
+    const c2=Math.sqrt(a*a+b*b);
+    const alpha=(Math.atan2(b,a)*180/Math.PI).toFixed(2);
+    const beta=(Math.atan2(a,b)*180/Math.PI).toFixed(2);
+    res=`Гипотенуза c = √(${a}²+${b}²) = ${c2.toFixed(3)}<br>∠α = ${alpha}° | ∠β = ${beta}°`;
+  } else if(!isNaN(a)&&!isNaN(c)) {
+    if(c<=a){res='❌ Гипотенуза катеттен үлкен болуы керек!';el.className='result-panel error show';document.getElementById('solveBody').innerHTML=res;return;}
+    const b2=Math.sqrt(c*c-a*a);
+    const alpha=(Math.asin(b2/c)*180/Math.PI).toFixed(2);
+    res=`Катет b = √(${c}²−${a}²) = ${b2.toFixed(3)}<br>∠α = arcsin(b/c) = ${alpha}°`;
+  } else if(!isNaN(c)&&!isNaN(A)) {
+    const rad=A*Math.PI/180;
+    const a2=(c*Math.sin(rad)).toFixed(3);
+    const b2=(c*Math.cos(rad)).toFixed(3);
+    res=`Катет a = c·sin(${A}°) = ${a2}<br>Катет b = c·cos(${A}°) = ${b2}<br>∠β = ${(90-A)}°`;
+  } else {
+    res='Кем дегенде 2 элементті енгізіңіз.';
+    el.className='result-panel error show';
+    document.getElementById('solveBody').innerHTML=res; return;
+  }
+  el.className='result-panel info show';
+  document.getElementById('solveBody').innerHTML=res;
+}
+
+// ===== PYTHAGORAS CHECK =====
+function checkPythag() {
+  const a=parseFloat(document.getElementById('py-a').value);
+  const b=parseFloat(document.getElementById('py-b').value);
+  const c=parseFloat(document.getElementById('py-c').value);
+  const el=document.getElementById('pythagResult');
+  const [s,m,lg]=[a,b,c].sort((x,y)=>x-y);
+  const isPythag=Math.abs(s*s+m*m-lg*lg)<0.001;
+  document.getElementById('pythagTitle').textContent=isPythag?'✅ Питагор үшбұрышы!':'❌ Питагор үшбұрышы емес';
+  document.getElementById('pythagBody').innerHTML=`${s}² + ${m}² = ${s*s+m*m}<br>Гипотенуза² = ${lg}² = ${lg*lg}<br>${isPythag?'Тең! Тікбұрышты үшбұрыш.':'Тең емес. Тікбұрышты емес.'}`;
+  el.className='result-panel '+(isPythag?'success':'error')+' show';
+}
+
+function setPythag(a,b,c) {
+  document.getElementById('py-a').value=a;
+  document.getElementById('py-b').value=b;
+  document.getElementById('py-c').value=c;
+  checkPythag();
+}
+
+// ===== QUIZ =====
+let qScore=0,qAnswered=0;
+const qTotal=document.querySelectorAll('.quiz-q').length;
+
+function answerQ(btn,idx) {
+  const q=btn.closest('.quiz-q');
+  if(q.querySelector('.correct-opt')) return;
+  const correct=parseInt(q.dataset.answer);
+  q.querySelectorAll('.q-opt').forEach(b=>b.disabled=true);
+  q.querySelectorAll('.q-opt')[correct].classList.add('correct-opt');
+  const fb=q.querySelector('.q-feedback');
+  fb.classList.add('show');
+  if(idx===correct){btn.classList.add('correct-opt');q.classList.add('correct');qScore++;}
+  else{btn.classList.add('wrong-opt');q.classList.add('wrong');}
+  qAnswered++;
+  if(qAnswered===qTotal){
+    const sr=document.getElementById('scoreResult');
+    sr.classList.add('show');
+    document.getElementById('scoreBig').textContent=qScore+'/'+qTotal;
+    const pct=qScore/qTotal;
+    document.getElementById('scoreMsg').textContent=
+      pct===1?'🎉 Тамаша! Барлық жауап дұрыс!':
+      pct>=0.75?'👏 Өте жақсы нәтиже!':
+      pct>=0.5?'📚 Жақсы, бірақ теорияны қайталаңыз!':'💪 Тырыс! Теорияны оқы.';
+  }
+}
+
+// ===== INIT =====
+setTimeout(()=>{updateResearch();drawTriangle(6,8);},200);
+window.addEventListener('resize',()=>{
+  if(document.getElementById('interactive').classList.contains('active')) updateTriangle();
+  if(document.getElementById('research').classList.contains('active')) updateResearch();
+});
+</script>
+</body>
+</html>
